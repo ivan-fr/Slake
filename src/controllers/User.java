@@ -1,8 +1,7 @@
 package controllers;
 
 import bdd.SingletonConnection;
-import models.Message;
-import models.Room;
+import models.Server;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class User {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement pstmt = conn.prepareStatement("SELECT u.pseudo from User u where pseudo = ?");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * from User u where pseudo = ?");
             pstmt.setString(1, pseudo);
             ResultSet res = pstmt.executeQuery();
 
@@ -40,40 +39,20 @@ public class User {
         return null;
     }
 
-    public static void getUserMessages(models.User user) {
+    public static void getUserServer(models.User user) {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * from Message m where m.user_source = ?");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * from Server c join User_has_Server UhS on c.idServer = UhS.Server_idServer join User U on U.idUser = UhS.User_idUser where U.idUser = ?");
             pstmt.setInt(1, user.getUserId());
-            ResultSet res_msg = pstmt.executeQuery();
+            ResultSet res_servers = pstmt.executeQuery();
 
-            ArrayList<Message> msgs = user.getMessages();
-            while (res_msg.next()) {
-                PreparedStatement pstmt_room = conn.prepareStatement("SELECT * from Room r where r.idRoom = ?");
-                pstmt.setInt(1, res_msg.getInt("Room_idRoom"));
-                ResultSet res_room = pstmt_room.executeQuery();
-                Room room = null;
-
-                if (res_room.next()) {
-                    room = new Room(res_room.getInt("idRoom"), res_room.getString("name"), res_room.getInt("userCounter"));
-                }
-
-                PreparedStatement pstmt_user_dest = conn.prepareStatement("SELECT * from User u where u.idUser = ?");
-                pstmt.setInt(1, res_msg.getInt("user_destination"));
-                ResultSet res_user_dest = pstmt_user_dest.executeQuery();
-
-                if(!res_user_dest.next()) {
-                    continue;
-                }
-
-                models.User user_dest = new models.User(res_user_dest.getInt("idUser"), res_user_dest.getString("pseudo"));
-
-                if (res_room.next()) {
-                    room = new Room(res_room.getInt("idRoom"), res_room.getString("name"), res_room.getInt("userCounter"));
-                }
-
-                msgs.add(new Message(res_msg.getString("content"), res_msg.getInt("Room_idRoom"), room, res_msg.getInt("user_source"), res_msg.getInt("user_destination"), user, user_dest));
+            ArrayList<Server> user_servers = user.getsServers();
+            Server server;
+            while (res_servers.next()) {
+                server = new Server(res_servers.getInt("idServer"), res_servers.getString("name"));
+                user_servers.add(server);
+//                server.getUsers().add(user);
             }
         } catch (SQLException e) {
             e.printStackTrace();

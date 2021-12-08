@@ -2,18 +2,21 @@ package models;
 
 import java.util.ArrayList;
 
-public class Room {
+public class Channel {
     private final Integer roomId;
     private final String name;
-    private Integer userCounter = 0;
     private final ArrayList<Message> messages = new ArrayList<>();
+    private final Server server;
 
-    public Room(Integer roomId, String name, Integer userCounter) {
+    public Channel(Integer roomId, String name, Integer userCounter, Server server) {
         this.roomId = roomId;
         this.name = name;
-        this.userCounter = userCounter;
+        this.server = server;
     }
 
+    public Server getServer() {
+        return server;
+    }
     public Integer getRoomId() {
         return roomId;
     }
@@ -24,9 +27,5 @@ public class Room {
 
     public String getName() {
         return name;
-    }
-
-    public Integer getUserCounter() {
-        return userCounter;
     }
 }
