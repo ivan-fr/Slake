@@ -5,27 +5,26 @@ import models.Server;
 import system.SlakeSystem;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class User {
-    public static boolean createUser(String pseudo) {
+    public static models.User createUser(String pseudo) {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO User (pseudo) VALUES (?)");
-            pstmt.setString(1, pseudo);
-            return pstmt.execute();
+            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO User (pseudo) VALUES (?)");
+            createStmt.setString(1, pseudo);
+            return getUserFromBDD(pseudo);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     public static models.User getUserFromBDD(String pseudo) {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * from User u where pseudo = ?");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * from User u where pseudo = ? LIMIT 1");
             pstmt.setString(1, pseudo);
             ResultSet res = pstmt.executeQuery();
 
@@ -33,7 +32,13 @@ public class User {
                 return null;
             }
 
-            return new models.User(res.getInt("idUser"), res.getString("pseudo"));
+            SlakeSystem ss = SlakeSystem.slakeSystem;
+            if (ss.getUserMap().containsKey(res.getInt("idUser"))) {
+                return ss.getUserMap().get(res.getInt("idUser"));
+            }
+            models.User u = new models.User(res.getInt("idUser"), res.getString("pseudo"));
+            ss.getUserMap().put(res.getInt("idUser"), u);
+            return u;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -51,7 +56,6 @@ public class User {
             user.getsServers().clear();
 
             SlakeSystem ss = SlakeSystem.slakeSystem;
-
 
             Server server;
             while (res_servers.next()) {
