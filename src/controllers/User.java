@@ -63,6 +63,7 @@ public class User {
                 server.getUsers().add(user);
                 user.getsServers().add(server);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
