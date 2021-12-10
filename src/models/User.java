@@ -2,7 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
-public class User {
+public class User extends AbstractModel{
     private final Integer userId;
     private final String pseudo;
     private final ArrayList<Server> servers = new ArrayList<>();

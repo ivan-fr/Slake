@@ -2,7 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
-public class Channel {
+public class Channel extends AbstractModel {
     private final Integer roomId;
     private final String name;
     private final ArrayList<Message> messages = new ArrayList<>();
