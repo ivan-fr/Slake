@@ -52,6 +52,7 @@ public class User {
 
             SlakeSystem ss = SlakeSystem.slakeSystem;
 
+
             Server server;
             while (res_servers.next()) {
                 if (ss.getServerMap().containsKey(res_servers.getInt("idServer"))) {
