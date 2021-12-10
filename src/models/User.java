@@ -23,4 +23,13 @@ public class User {
         this.userId = userId;
         this.pseudo = pseudo;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", pseudo='" + pseudo + '\'' +
+                ", servers=" + servers +
+                '}';
+    }
 }
