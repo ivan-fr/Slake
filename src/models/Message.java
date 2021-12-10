@@ -2,7 +2,7 @@ package models;
 
 import java.util.Date;
 
-public class Message {
+public class Message extends AbstractModel {
     private final String content;
     private final Date date;
     private final Integer roomId;
