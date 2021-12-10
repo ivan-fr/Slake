@@ -2,6 +2,7 @@ package controllers;
 
 import bdd.SingletonConnection;
 import models.Server;
+import system.SlakeSystem;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class User {
         return false;
     }
 
-    public static models.User getUser(String pseudo) {
+    public static models.User getUserFromBDD(String pseudo) {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
@@ -39,7 +40,7 @@ public class User {
         return null;
     }
 
-    public static void getUserServer(models.User user) {
+    public static void getUserServersFromBDD(models.User user) {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
@@ -47,12 +48,20 @@ public class User {
             pstmt.setInt(1, user.getUserId());
             ResultSet res_servers = pstmt.executeQuery();
 
-            ArrayList<Server> user_servers = user.getsServers();
+            user.getsServers().clear();
+
+            SlakeSystem ss = SlakeSystem.slakeSystem;
+
             Server server;
             while (res_servers.next()) {
-                server = new Server(res_servers.getInt("idServer"), res_servers.getString("name"));
-                user_servers.add(server);
-//                server.getUsers().add(user);
+                if (ss.getServerMap().containsKey(res_servers.getInt("idServer"))) {
+                    server = ss.getServerMap().get(user.getUserId());
+                } else {
+                    server = new Server(res_servers.getInt("idServer"), res_servers.getString("name"));
+                    ss.getServerMap().put(user.getUserId(), server);
+                }
+                server.getUsers().add(user);
+                user.getsServers().add(server);
             }
         } catch (SQLException e) {
             e.printStackTrace();
