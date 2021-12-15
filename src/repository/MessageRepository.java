@@ -43,9 +43,11 @@ public class MessageRepository implements IRepository<Message, Integer> {
                 return null;
             }
 
-            Message s = new Message(res.getString("content"), res.getDate("date"));
-            s.setKey(res.getInt("idMessage"));
-            return s;
+            Message m = new Message(res.getString("content"), res.getDate("date"));
+            m.getReferences().put("channel", res.getInt("Channel_idChannel"));
+            m.getReferences().put("user", res.getInt("User_idUser"));
+            m.setKey(res.getInt("idMessage"));
+            return m;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -99,9 +101,11 @@ public class MessageRepository implements IRepository<Message, Integer> {
             ResultSet res = pstmt.executeQuery();
 
             while (res.next()) {
-                Message s = new Message(res.getString("content"), res.getDate("date"));
-                s.setKey(res.getString("idMessage"));
-                messages.add(s);
+                Message m = new Message(res.getString("content"), res.getDate("date"));
+                m.getReferences().put("channel", res.getInt("Channel_idChannel"));
+                m.getReferences().put("user", res.getInt("User_idUser"));
+                m.setKey(res.getString("idMessage"));
+                messages.add(m);
             }
         } catch (SQLException e) {
             e.printStackTrace();

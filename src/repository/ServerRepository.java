@@ -35,14 +35,25 @@ public class ServerRepository implements IRepository<Server, Integer> {
             assert conn != null;
             PreparedStatement pstmt = conn.prepareStatement("SELECT * from Server u where idServer = ? LIMIT 1");
             pstmt.setInt(1, key);
-            ResultSet res = pstmt.executeQuery();
+            ResultSet resServer = pstmt.executeQuery();
 
-            if (!res.next()) {
+            if (!resServer.next()) {
                 return null;
             }
 
-            Server s = new Server(res.getString("name"));
-            s.setKey(res.getInt("idServer"));
+            Server s = new Server(resServer.getString("name"));
+            s.setKey(resServer.getInt("idServer"));
+
+            s.getManyToManyReferences().put("users", new ArrayList<>());
+
+            PreparedStatement stmt = conn.prepareStatement("SELECT * from User JOIN User_has_Server UhS on User.idUser = UhS.User_idUser JOIN Server S on S.idServer = UhS.Server_idServer where idServer = ?");
+            stmt.setInt(1,  resServer.getInt("idServer"));
+            ResultSet resUser = stmt.executeQuery();
+
+            while (resUser.next()) {
+                s.getManyToManyReferences().get("users").add(resUser.getInt("idUser"));
+            }
+
             return s;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,7 +109,17 @@ public class ServerRepository implements IRepository<Server, Integer> {
 
             while (res.next()) {
                 Server s = new Server(res.getString("name"));
-                s.setKey(res.getString("idServer"));
+                s.setKey(res.getInt("idServer"));
+                s.getManyToManyReferences().put("users", new ArrayList<>());
+
+                PreparedStatement stmt = conn.prepareStatement("SELECT * from User JOIN User_has_Server UhS on User.idUser = UhS.User_idUser JOIN Server S on S.idServer = UhS.Server_idServer where idServer = ?");
+                stmt.setInt(1,  res.getInt("idServer"));
+                ResultSet resUser = stmt.executeQuery();
+
+                while (resUser.next()) {
+                    s.getManyToManyReferences().get("users").add(resUser.getInt("idUser"));
+                }
+
                 servers.add(s);
             }
         } catch (SQLException e) {

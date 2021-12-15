@@ -44,6 +44,18 @@ public class UserRepository implements IRepository<User, String> {
 
             User u = new models.User(res.getString("pseudo"));
             u.setKey(res.getInt("idUser"));
+
+            u.getManyToManyReferences().put("servers", new ArrayList<>());
+
+            PreparedStatement stmt = conn.prepareStatement("SELECT * from Server JOIN User_has_Server UhS on Server.idServer = UhS.Server_idServer join User U on U.idUser = UhS.User_idUser where idUser = ?");
+            stmt.setInt(1,  res.getInt("idUser"));
+            ResultSet resServer = stmt.executeQuery();
+
+            while (resServer.next()) {
+                u.getManyToManyReferences().get("servers").add(resServer.getInt("idServer"));
+            }
+
+            return u;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -99,6 +111,17 @@ public class UserRepository implements IRepository<User, String> {
             while (res.next()) {
                 User u = new models.User(res.getString("pseudo"));
                 u.setKey(res.getInt("idUser"));
+
+                u.getManyToManyReferences().put("servers", new ArrayList<>());
+
+                PreparedStatement stmt = conn.prepareStatement("SELECT * from Server JOIN User_has_Server UhS on Server.idServer = UhS.Server_idServer join User U on U.idUser = UhS.User_idUser where idUser = ?");
+                stmt.setInt(1,  res.getInt("idUser"));
+                ResultSet resServer = stmt.executeQuery();
+
+                while (resServer.next()) {
+                    u.getManyToManyReferences().get("servers").add(resServer.getInt("idServer"));
+                }
+
                 users.add(u);
             }
         } catch (SQLException e) {

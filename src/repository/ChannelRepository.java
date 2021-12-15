@@ -42,9 +42,10 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
                 return null;
             }
 
-            Channel s = new Channel(res.getString("name"));
-            s.setKey(res.getInt("idChannel"));
-            return s;
+            Channel c = new Channel(res.getString("name"));
+            c.getReferences().put("server", res.getInt("Server_idServer"));
+            c.setKey(res.getInt("idChannel"));
+            return c;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -99,6 +100,7 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
 
             while (res.next()) {
                 Channel s = new Channel(res.getString("name"));
+                s.getReferences().put("server", res.getInt("Server_idServer"));
                 s.setKey(res.getString("idChannel"));
                 channels.add(s);
             }
