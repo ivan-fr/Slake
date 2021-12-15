@@ -15,7 +15,7 @@ public class MessageRepository implements IRepository<Message, Integer> {
 
         try {
             assert conn != null;
-            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO Message (content, Channel_idChannel, date, User_idUser) VALUES (?, ?, now(), ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO Message (content, Channel_idChannel, date, User_pseudo) VALUES (?, ?, now(), ?)", Statement.RETURN_GENERATED_KEYS);
             createStmt.setString(1, object.getContent());
             createStmt.setInt(2, (Integer) object.getChannel().getKey());
             createStmt.setInt(3, (Integer) object.getUser().getKey());
@@ -45,7 +45,13 @@ public class MessageRepository implements IRepository<Message, Integer> {
 
             Message m = new Message(res.getString("content"), res.getDate("date"));
             m.getManyToOneReferences().put("channel", res.getInt("Channel_idChannel"));
-            m.getManyToOneReferences().put("user", res.getInt("User_idUser"));
+
+            PreparedStatement userStmt = conn.prepareStatement("SELECT * FROM User where pseudo = ?");
+            userStmt.setInt(1, res.getInt("User_pseudo"));
+            ResultSet userRes = userStmt.executeQuery();
+            userRes.next();
+            m.getManyToOneReferences().put("user", userRes.getString("pseudo"));
+
             m.setKey(res.getInt("idMessage"));
             return m;
         } catch (SQLException e) {
@@ -103,7 +109,13 @@ public class MessageRepository implements IRepository<Message, Integer> {
             while (res.next()) {
                 Message m = new Message(res.getString("content"), res.getDate("date"));
                 m.getManyToOneReferences().put("channel", res.getInt("Channel_idChannel"));
-                m.getManyToOneReferences().put("user", res.getInt("User_idUser"));
+
+                PreparedStatement userStmt = conn.prepareStatement("SELECT * FROM User where pseudo = ?");
+                userStmt.setInt(1, res.getInt("User_pseudo"));
+                ResultSet userRes = userStmt.executeQuery();
+                userRes.next();
+                m.getManyToOneReferences().put("user", userRes.getString("pseudo"));
+
                 m.setKey(res.getInt("idMessage"));
                 messages.add(m);
             }

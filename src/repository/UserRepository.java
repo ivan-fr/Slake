@@ -41,12 +41,12 @@ public class UserRepository implements IRepository<User, String> {
             }
 
             User u = new User(res.getString("pseudo"));
-            u.setKey(res.getInt("idUser"));
+            u.setKey(res.getInt(key));
 
             u.getManyToManyReferences().put("servers", new ArrayList<>());
 
-            PreparedStatement stmt = conn.prepareStatement("SELECT * from Server JOIN User_has_Server UhS on Server.idServer = UhS.Server_idServer join User U on U.idUser = UhS.User_idUser where idUser = ?");
-            stmt.setInt(1,  res.getInt("idUser"));
+            PreparedStatement stmt = conn.prepareStatement("SELECT * from Server JOIN Server_has_User ShU on Server.idServer = ShU.Server_idServer JOIN User U on U.pseudo = ShU.User_pseudo where pseudo = ?");
+            stmt.setString(1, key);
             ResultSet resServer = stmt.executeQuery();
 
             while (resServer.next()) {
@@ -83,9 +83,9 @@ public class UserRepository implements IRepository<User, String> {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement pstmt = conn.prepareStatement("UPDATE User  SET pseudo = ? WHERE idUser = ?");
+            PreparedStatement pstmt = conn.prepareStatement("UPDATE User  SET pseudo = ? WHERE pseudo = ?");
             pstmt.setString(1, object.getPseudo());
-            pstmt.setInt(2, (Integer) object.getKey());
+            pstmt.setString(2, object.getPseudo());
             pstmt.execute();
 
             return get(object.getPseudo());
@@ -108,12 +108,12 @@ public class UserRepository implements IRepository<User, String> {
 
             while (res.next()) {
                 User u = new User(res.getString("pseudo"));
-                u.setKey(res.getInt("idUser"));
+                u.setKey(res.getString("pseudo"));
 
                 u.getManyToManyReferences().put("servers", new ArrayList<>());
 
-                PreparedStatement stmt = conn.prepareStatement("SELECT * from Server JOIN User_has_Server UhS on Server.idServer = UhS.Server_idServer join User U on U.idUser = UhS.User_idUser where idUser = ?");
-                stmt.setInt(1,  res.getInt("idUser"));
+                PreparedStatement stmt = conn.prepareStatement("SELECT * from Server Join Server_has_User ShU on Server.idServer = ShU.Server_idServer JOIN User U on U.pseudo = ShU.User_pseudo where pseudo = ?");
+                stmt.setString(1, res.getString("pseudo"));
                 ResultSet resServer = stmt.executeQuery();
 
                 while (resServer.next()) {

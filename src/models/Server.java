@@ -1,5 +1,6 @@
 package models;
 
+import composite.CompositeChannelRepository;
 import composite.CompositeUserRepository;
 
 import java.util.ArrayList;
@@ -24,6 +25,11 @@ public class Server extends AbstractModel {
     }
 
     public ArrayList<Channel> getChannels() {
+        this.channels.clear();
+        for (Object ref : this.getManyToManyReferences().get("server")) {
+            this.channels.add(CompositeChannelRepository.compositeChannelRepository.get((Integer) ref));
+        }
+
         return channels;
     }
 
@@ -37,11 +43,6 @@ public class Server extends AbstractModel {
 
     @Override
     public String toString() {
-        return "Server{" +
-                "userCounter=" + userCounter +
-                ", name='" + name + '\'' +
-                ", channels=" + channels +
-                ", users=" + users +
-                '}';
+        return "Server{" + "userCounter=" + userCounter + ", name='" + name + '\'' + ", channels=" + channels + ", users=" + users + '}';
     }
 }

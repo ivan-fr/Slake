@@ -1,5 +1,7 @@
 package models;
 
+import composite.CompositeUserRepository;
+
 import java.util.Date;
 
 public class Message extends AbstractModel {
@@ -26,7 +28,7 @@ public class Message extends AbstractModel {
     }
 
     public User getUser() {
-        return user;
+        return CompositeUserRepository.compositeUserRepository.get((String) this.getManyToOneReferences().get("user"));
     }
 
     @Override

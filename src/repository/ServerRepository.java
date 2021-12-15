@@ -46,7 +46,7 @@ public class ServerRepository implements IRepository<Server, Integer> {
 
             s.getManyToManyReferences().put("users", new ArrayList<>());
 
-            PreparedStatement stmt = conn.prepareStatement("SELECT * from User JOIN User_has_Server UhS on User.idUser = UhS.User_idUser JOIN Server S on S.idServer = UhS.Server_idServer where idServer = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * from User JOIN Server_has_User ShU on User.pseudo = ShU.User_pseudo JOIN Server S on S.idServer = ShU.Server_idServer where idServer = ?");
             stmt.setInt(1, resServer.getInt("idServer"));
             ResultSet resUser = stmt.executeQuery();
 
@@ -112,7 +112,7 @@ public class ServerRepository implements IRepository<Server, Integer> {
                 s.setKey(res.getInt("idServer"));
                 s.getManyToManyReferences().put("users", new ArrayList<>());
 
-                PreparedStatement stmt = conn.prepareStatement("SELECT * from User JOIN User_has_Server UhS on User.idUser = UhS.User_idUser JOIN Server S on S.idServer = UhS.Server_idServer where idServer = ?");
+                PreparedStatement stmt = conn.prepareStatement("SELECT * from User JOIN Server_has_User ShU on User.pseudo = ShU.User_pseudo JOIN Server S on S.idServer = ShU.Server_idServer where idServer = ?");
                 stmt.setInt(1, res.getInt("idServer"));
                 ResultSet resUser = stmt.executeQuery();
 
