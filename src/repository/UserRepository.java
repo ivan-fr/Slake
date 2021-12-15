@@ -41,7 +41,7 @@ public class UserRepository implements IRepository<User, String> {
             }
 
             User u = new User(res.getString("pseudo"));
-            u.setKey(res.getInt(key));
+            u.setKey(res.getString("pseudo"));
 
             u.getManyToManyReferences().put("servers", new ArrayList<>());
 
