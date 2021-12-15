@@ -47,11 +47,11 @@ public class ServerRepository implements IRepository<Server, Integer> {
             s.getManyToManyReferences().put("users", new ArrayList<>());
 
             PreparedStatement stmt = conn.prepareStatement("SELECT * from User JOIN User_has_Server UhS on User.idUser = UhS.User_idUser JOIN Server S on S.idServer = UhS.Server_idServer where idServer = ?");
-            stmt.setInt(1,  resServer.getInt("idServer"));
+            stmt.setInt(1, resServer.getInt("idServer"));
             ResultSet resUser = stmt.executeQuery();
 
             while (resUser.next()) {
-                s.getManyToManyReferences().get("users").add(resUser.getInt("idUser"));
+                s.getManyToManyReferences().get("users").add(resUser.getInt("pseudo"));
             }
 
             return s;
@@ -113,11 +113,11 @@ public class ServerRepository implements IRepository<Server, Integer> {
                 s.getManyToManyReferences().put("users", new ArrayList<>());
 
                 PreparedStatement stmt = conn.prepareStatement("SELECT * from User JOIN User_has_Server UhS on User.idUser = UhS.User_idUser JOIN Server S on S.idServer = UhS.Server_idServer where idServer = ?");
-                stmt.setInt(1,  res.getInt("idServer"));
+                stmt.setInt(1, res.getInt("idServer"));
                 ResultSet resUser = stmt.executeQuery();
 
                 while (resUser.next()) {
-                    s.getManyToManyReferences().get("users").add(resUser.getInt("idUser"));
+                    s.getManyToManyReferences().get("users").add(resUser.getInt("pseudo"));
                 }
 
                 servers.add(s);

@@ -5,14 +5,14 @@ import java.util.HashMap;
 
 public abstract class AbstractModel {
     private Object key;
-    private final HashMap<String, Integer> manyToOneReferences = new HashMap<>();
-    private final HashMap<String, ArrayList<Integer>> manyToManyReferences = new HashMap<>();
+    private final HashMap<String, Object> manyToOneReferences = new HashMap<>();
+    private final HashMap<String, ArrayList<Object>> manyToManyReferences = new HashMap<>();
 
-    public HashMap<String, Integer> getManyToOneReferences() {
+    public HashMap<String, Object> getManyToOneReferences() {
         return manyToOneReferences;
     }
 
-    public HashMap<String, ArrayList<Integer>> getManyToManyReferences() {
+    public HashMap<String, ArrayList<Object>> getManyToManyReferences() {
         return manyToManyReferences;
     }
 

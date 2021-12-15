@@ -40,7 +40,7 @@ public class UserRepository implements IRepository<User, String> {
                 return null;
             }
 
-            User u = new models.User(res.getString("pseudo"));
+            User u = new User(res.getString("pseudo"));
             u.setKey(res.getInt("idUser"));
 
             u.getManyToManyReferences().put("servers", new ArrayList<>());
@@ -107,7 +107,7 @@ public class UserRepository implements IRepository<User, String> {
             ResultSet res = pstmt.executeQuery();
 
             while (res.next()) {
-                User u = new models.User(res.getString("pseudo"));
+                User u = new User(res.getString("pseudo"));
                 u.setKey(res.getInt("idUser"));
 
                 u.getManyToManyReferences().put("servers", new ArrayList<>());

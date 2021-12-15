@@ -1,5 +1,8 @@
 package models;
 
+import composite.CompositeServerRepository;
+import composite.CompositeUserRepository;
+
 import java.util.ArrayList;
 
 public class Server extends AbstractModel {
@@ -9,6 +12,11 @@ public class Server extends AbstractModel {
     private final ArrayList<User> users = new ArrayList<>();
 
     public ArrayList<User> getUsers() {
+        this.users.clear();
+        for (Object ref : this.getManyToManyReferences().get("user")) {
+            this.users.add(CompositeUserRepository.compositeUserRepository.get((String) ref));
+        }
+
         return users;
     }
 
