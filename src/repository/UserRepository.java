@@ -15,7 +15,6 @@ public class UserRepository implements IRepository<User, String> {
     @Override
     public User save(User object) {
         Connection conn = SingletonConnection.connection;
-
         try {
             assert conn != null;
             PreparedStatement createStmt = conn.prepareStatement("INSERT INTO User (pseudo) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
@@ -25,7 +24,6 @@ public class UserRepository implements IRepository<User, String> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
