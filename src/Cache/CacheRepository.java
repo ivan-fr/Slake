@@ -1,4 +1,4 @@
-package Cache;
+package cache;
 
 import models.AbstractModel;
 import models.User;
@@ -16,20 +16,17 @@ public class CacheRepository<T> {
         return map;
     }
 
-    public void setMap(HashMap<Object, T> map) {
-        this.map = map;
-    }
-
-    public void save(AbstractModel instance) {
+    public T save(AbstractModel instance) {
         map.put(instance.getKey(), (T)instance) ;
+        return (T)instance ;
     }
 
     public T get(Object key) {
-        return map.get(key) ;
+        return (T)map.get(key) ;
     }
 
-    public boolean delete(AbstractModel instace) {
-        return map.remove(instace.getKey(), (T)instace) ;
+    public boolean delete(AbstractModel instance) {
+        return map.remove(instance.getKey(), (T)instance) ;
     }
 
     public void update(AbstractModel oldInstance, AbstractModel newInstance) {
@@ -46,6 +43,5 @@ public class CacheRepository<T> {
         }
         return list ;
     }
-
 
 }
