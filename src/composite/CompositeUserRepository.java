@@ -1,6 +1,6 @@
 package composite;
 
-import Cache.CacheRepository;
+import cache.CacheRepository;
 import models.User;
 import repository.UserRepository;
 

@@ -1,7 +1,6 @@
-package Cache;
+package cache;
 
 import models.AbstractModel;
-import models.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
