@@ -43,7 +43,7 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
             }
 
             Channel c = new Channel(res.getString("name"));
-            c.getReferences().put("server", res.getInt("Server_idServer"));
+            c.getManyToOneReferences().put("server", res.getInt("Server_idServer"));
             c.setKey(res.getInt("idChannel"));
             return c;
         } catch (SQLException e) {
@@ -100,7 +100,7 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
 
             while (res.next()) {
                 Channel s = new Channel(res.getString("name"));
-                s.getReferences().put("server", res.getInt("Server_idServer"));
+                s.getManyToOneReferences().put("server", res.getInt("Server_idServer"));
                 s.setKey(res.getInt("idChannel"));
                 channels.add(s);
             }
