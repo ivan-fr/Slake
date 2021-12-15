@@ -28,4 +28,14 @@ public class Message extends AbstractModel {
     public User getUser() {
         return user;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "content='" + content + '\'' +
+                ", date=" + date +
+                ", channel=" + channel +
+                ", user=" + user +
+                '}';
+    }
 }

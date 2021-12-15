@@ -22,4 +22,13 @@ public class Channel extends AbstractModel {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "Channel{" +
+                "name='" + name + '\'' +
+                ", messages=" + messages +
+                ", server=" + server +
+                '}';
+    }
 }

@@ -1,6 +1,5 @@
 package models;
 
-import composite.CompositeServerRepository;
 import composite.CompositeUserRepository;
 
 import java.util.ArrayList;
@@ -34,5 +33,15 @@ public class Server extends AbstractModel {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Server{" +
+                "userCounter=" + userCounter +
+                ", name='" + name + '\'' +
+                ", channels=" + channels +
+                ", users=" + users +
+                '}';
     }
 }
