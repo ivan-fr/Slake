@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class AbstractModel {
-
-    private Object key ;
+    private Object key;
     private final HashMap<String, Integer> references = new HashMap<>();
     private final HashMap<String, ArrayList<Integer>> manyToManyReferences = new HashMap<>();
 
@@ -18,8 +17,9 @@ public abstract class AbstractModel {
     }
 
     public Object getKey() {
-        return key ;
+        return key;
     }
+
     public void setKey(Object key) {
         this.key = key;
     }

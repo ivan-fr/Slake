@@ -101,7 +101,7 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
             while (res.next()) {
                 Channel s = new Channel(res.getString("name"));
                 s.getReferences().put("server", res.getInt("Server_idServer"));
-                s.setKey(res.getString("idChannel"));
+                s.setKey(res.getInt("idChannel"));
                 channels.add(s);
             }
         } catch (SQLException e) {

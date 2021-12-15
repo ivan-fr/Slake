@@ -104,7 +104,7 @@ public class MessageRepository implements IRepository<Message, Integer> {
                 Message m = new Message(res.getString("content"), res.getDate("date"));
                 m.getReferences().put("channel", res.getInt("Channel_idChannel"));
                 m.getReferences().put("user", res.getInt("User_idUser"));
-                m.setKey(res.getString("idMessage"));
+                m.setKey(res.getInt("idMessage"));
                 messages.add(m);
             }
         } catch (SQLException e) {

@@ -12,8 +12,7 @@ public class SingletonConnection {
 
     private static Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/Slake?" +
-                            "user=root&password= ");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/Slake");
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
