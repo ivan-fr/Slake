@@ -16,7 +16,7 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
     }
 
     @Override
-    public boolean delete(String key) {
+    public boolean delete(Integer key) {
         return false;
     }
 

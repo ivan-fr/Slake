@@ -44,7 +44,8 @@ public class UserRepository implements IRepository<User, String> {
                 return null;
             }
 
-            return new models.User(res.getInt("idUser"), res.getString("pseudo"));
+            User u = new models.User(res.getString("pseudo"));
+            u.setKey(res.getInt("idUser"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,7 +77,7 @@ public class UserRepository implements IRepository<User, String> {
             assert conn != null;
             PreparedStatement pstmt = conn.prepareStatement("UPDATE User  SET pseudo = ? WHERE idUser = ?");
             pstmt.setString(1, object.getPseudo());
-            pstmt.setInt(2, object.getUserId());
+            pstmt.setInt(2, (Integer) object.getKey());
             pstmt.execute();
 
             return get(object.getPseudo());
@@ -98,7 +99,9 @@ public class UserRepository implements IRepository<User, String> {
             ResultSet res = pstmt.executeQuery();
 
             while (res.next()) {
-                users.add(new models.User(res.getInt("idUser"), res.getString("pseudo")));
+                User u = new models.User(res.getString("pseudo"));
+                u.setKey(res.getInt("idUser"));
+                users.add(u);
             }
         } catch (SQLException e) {
             e.printStackTrace();

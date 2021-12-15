@@ -16,7 +16,7 @@ public class MessageRepository implements IRepository<Message, Integer> {
     }
 
     @Override
-    public boolean delete(String key) {
+    public boolean delete(Integer key) {
         return false;
     }
 

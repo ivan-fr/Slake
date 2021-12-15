@@ -3,11 +3,10 @@ package models;
 import java.util.ArrayList;
 
 public class User extends AbstractModel{
-    private final Integer userId;
     private final String pseudo;
     private final ArrayList<Server> servers = new ArrayList<>();
 
-    public ArrayList<Server> getsServers() {
+    public ArrayList<Server> getServers() {
         return servers;
     }
 
@@ -15,19 +14,13 @@ public class User extends AbstractModel{
         return pseudo;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public User(Integer userId, String pseudo) {
-        this.userId = userId;
+    public User(String pseudo) {
         this.pseudo = pseudo;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "userId=" + userId +
                 ", pseudo='" + pseudo + '\'' +
                 ", servers=" + servers +
                 '}';

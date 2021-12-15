@@ -12,8 +12,7 @@ public class Server extends AbstractModel {
         return users;
     }
 
-    public Server(Integer userCounter, String name) {
-        this.userCounter = userCounter;
+    public Server(String name) {
         this.name = name;
     }
 
