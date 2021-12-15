@@ -1,5 +1,6 @@
 package models;
 
+import composite.CompositeChannelRepository;
 import composite.CompositeUserRepository;
 
 import java.util.Date;
@@ -7,8 +8,6 @@ import java.util.Date;
 public class Message extends AbstractModel {
     private final String content;
     private final Date date;
-    private final Channel channel = null;
-    private final User user = null;
 
     public Message(String content, Date date) {
         this.content = content;
@@ -24,7 +23,7 @@ public class Message extends AbstractModel {
     }
 
     public Channel getChannel() {
-        return channel;
+        return CompositeChannelRepository.compositeChannelRepository.get((Integer) this.getManyToOneReferences().get("channel"));
     }
 
     public User getUser() {
@@ -36,8 +35,6 @@ public class Message extends AbstractModel {
         return "Message{" +
                 "content='" + content + '\'' +
                 ", date=" + date +
-                ", channel=" + channel +
-                ", user=" + user +
                 '}';
     }
 }

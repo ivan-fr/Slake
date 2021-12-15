@@ -103,7 +103,7 @@ public class MessageRepository implements IRepository<Message, Integer> {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * from Message u");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * from Message u ORDER BY date");
             ResultSet res = pstmt.executeQuery();
 
             while (res.next()) {
