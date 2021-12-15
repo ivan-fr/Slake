@@ -1,61 +1,72 @@
 package composite;
 
-import cache.CacheRepository;
-import models.AbstractModel;
+import Cache.CacheRepository;
 import models.User;
 import repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class CompositeUserRepository {
-
+public class CompositeUserRepository implements IComposite<User, String> {
     public final static CompositeUserRepository compositeUserRepository = new CompositeUserRepository();
-    public static UserRepository userRepository ;
-    public CacheRepository<User> userCacheRepository = new CacheRepository<User>();
-
+    private final CacheRepository<User> userCacheRepository = new CacheRepository<>();
 
     private CompositeUserRepository() {
-    }
-
-    public void importCache() {
-        // fill the cache
 
     }
 
-
-    public User save(User user) {
-        User savedUser = userRepository.userRepository.save(user) ;
-        userCacheRepository.save(user) ;
-        return savedUser ;
+    @Override
+    public User save(User object) {
+        User savedUser = UserRepository.userRepository.save(object);
+        if (savedUser != null) {
+            userCacheRepository.save(savedUser);
+        }
+        return savedUser;
     }
 
+    @Override
+    public User get(String key) {
+        if (userCacheRepository.get(key) == null) {
+            User u = UserRepository.userRepository.get(key);
+            userCacheRepository.save(u);
+            return u;
+        }
 
-    public User get() {
-        // cache
-
-        return null ;
+        return userCacheRepository.get(key);
     }
 
-
+    @Override
     public boolean delete(String key) {
-        // BDD
+        if (UserRepository.userRepository.delete(key)) {
+            if (userCacheRepository.get(key) != null) {
+                userCacheRepository.delete(userCacheRepository.get(key));
+            }
 
-        //Cache
-        return false ;
+            return true;
+        }
+
+        return false;
     }
 
-    public User update(User user) {
-
-        // BDD
-
-        //Cache
-
-        return null ;
+    @Override
+    public User update(User object) {
+        User newUser = UserRepository.userRepository.update(object);
+        userCacheRepository.update(object, newUser);
+        return newUser;
     }
 
-    public ArrayList<User> list() {
-        //Cache
-
+    @Override
+    public List<User> list() {
+        return userCacheRepository.list();
     }
 
+    @Override
+    public void hydrate() {
+        ArrayList<User> users = UserRepository.userRepository.list();
+        userCacheRepository.clear();
+
+        for (User user : users) {
+            userCacheRepository.save(user);
+        }
+    }
 }
