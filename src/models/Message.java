@@ -5,14 +5,12 @@ import java.util.Date;
 public class Message extends AbstractModel {
     private final String content;
     private final Date date;
-    private final Channel channel;
-    private final User user;
+    private final Channel channel = null;
+    private final User user = null;
 
-    public Message(String content, Date date, Channel channel, User user) {
+    public Message(String content, Date date) {
         this.content = content;
         this.date = date;
-        this.channel = channel;
-        this.user = user;
     }
 
     public Date getDate() {

@@ -3,10 +3,7 @@ package repository;
 import bdd.SingletonConnection;
 import models.Server;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class ServerRepository implements IRepository<Server, Integer> {
@@ -18,9 +15,12 @@ public class ServerRepository implements IRepository<Server, Integer> {
 
         try {
             assert conn != null;
-            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO Server (name) VALUES (?)");
+            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO Server (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
             createStmt.setString(1, object.getName());
-            return get((Integer) object.getKey());
+            createStmt.executeUpdate();
+            ResultSet res = createStmt.getGeneratedKeys();
+            res.next();
+            return get(res.getInt(1));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -41,7 +41,7 @@ public class ServerRepository implements IRepository<Server, Integer> {
                 return null;
             }
 
-            Server s = new Server(res.getString("pseudo"));
+            Server s = new Server(res.getString("name"));
             s.setKey(res.getInt("idServer"));
             return s;
         } catch (SQLException e) {

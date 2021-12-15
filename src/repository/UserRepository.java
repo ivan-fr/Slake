@@ -3,10 +3,7 @@ package repository;
 import bdd.SingletonConnection;
 import models.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class UserRepository implements IRepository<User, String> {
@@ -21,8 +18,9 @@ public class UserRepository implements IRepository<User, String> {
 
         try {
             assert conn != null;
-            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO User (pseudo) VALUES (?)");
+            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO User (pseudo) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
             createStmt.setString(1, object.getPseudo());
+            createStmt.executeUpdate();
             return get(object.getPseudo());
         } catch (SQLException e) {
             e.printStackTrace();
