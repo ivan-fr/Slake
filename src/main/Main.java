@@ -13,5 +13,7 @@ public class Main {
         } catch (Exception ex) {
             System.out.println("Mysql implementation error.");
         }
+
+
     }
 }
