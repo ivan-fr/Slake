@@ -6,7 +6,7 @@ import composite.CompositeUserSingleton;
 import java.util.ArrayList;
 
 public class Server extends AbstractModel {
-    private Integer userCounter = 0;
+    private final Integer userCounter = 0;
     private final String name;
     private final ArrayList<Channel> channels = new ArrayList<>();
     private final ArrayList<User> users = new ArrayList<>();
