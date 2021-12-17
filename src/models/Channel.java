@@ -28,9 +28,8 @@ public class Channel extends AbstractModel {
 
     @Override
     public String toString() {
-        return "Channel{" +
-                "name='" + name + '\'' +
-                ", server=" + getServer() +
-                '}';
+        return "Channel { "
+                + "name='" + name
+                + "', server=" + getServer() + " }";
     }
 }

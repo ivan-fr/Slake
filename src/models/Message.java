@@ -36,9 +36,8 @@ public class Message extends AbstractModel {
 
     @Override
     public String toString() {
-        return "Message{" +
-                "content='" + content + '\'' +
-                ", date=" + date +
-                '}';
+        return "Message { "
+            + "content='" + content
+            + "', date=" + date + " }";
     }
 }

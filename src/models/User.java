@@ -27,9 +27,8 @@ public class User extends AbstractModel {
 
     @Override
     public String toString() {
-        return "User{" +
-                ", pseudo='" + pseudo + '\'' +
-                ", servers=" + servers +
-                '}';
+        return "User { "
+                + ", pseudo='" + pseudo
+                + "', servers=" + servers + " }";
     }
 }
