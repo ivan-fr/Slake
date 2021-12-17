@@ -1,6 +1,7 @@
 package repository;
 
 import bdd.SingletonConnection;
+import models.Server;
 import models.User;
 
 import java.sql.*;
@@ -127,5 +128,20 @@ public class UserRepository implements IRepository<User, String> {
         }
 
         return users;
+    }
+
+    public User addServer(User user, Server server) {
+        Connection conn = SingletonConnection.connection;
+        try {
+            assert conn != null;
+            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO Server_has_User (Server_idServer, User_pseudo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            createStmt.setInt(1, (Integer) server.getKey());
+            createStmt.setString(2, (String) user.getKey());
+            createStmt.executeUpdate();
+            return get((String) user.getKey());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

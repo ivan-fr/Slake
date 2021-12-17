@@ -42,7 +42,7 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
                 return null;
             }
 
-            Channel c = new Channel(res.getString("name"));
+            Channel c = new Channel(res.getString("name"), res.getInt("Server_idServer"));
             c.getManyToOneReferences().put("server", res.getInt("Server_idServer"));
             c.setKey(res.getInt("idChannel"));
             return c;
@@ -99,7 +99,7 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
             ResultSet res = pstmt.executeQuery();
 
             while (res.next()) {
-                Channel s = new Channel(res.getString("name"));
+                Channel s = new Channel(res.getString("name"), res.getInt("Server_idServer"));
                 s.getManyToOneReferences().put("server", res.getInt("Server_idServer"));
                 s.setKey(res.getInt("idChannel"));
                 channels.add(s);

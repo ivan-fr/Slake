@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class CacheRepository<T> {
 
-    private HashMap<Object, T> map = new HashMap<>();
+    private final HashMap<Object, T> map = new HashMap<>();
 
     public HashMap<Object, T> getMap() {
         return map;

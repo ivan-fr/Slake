@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CompositeServerRepository implements IComposite<Server, Integer> {
     public final static CompositeServerRepository compositeServerRepository = new CompositeServerRepository();
-    private final CacheRepository<Server> serverCacheRepository = new CacheRepository<>();
+    public final CacheRepository<Server> serverCacheRepository = new CacheRepository<>();
 
     private CompositeServerRepository() {
 

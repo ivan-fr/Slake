@@ -43,15 +43,8 @@ public class MessageRepository implements IRepository<Message, Integer> {
                 return null;
             }
 
-            Message m = new Message(res.getString("content"), res.getDate("date"));
+            Message m = new Message(res.getString("content"), res.getDate("date"), res.getString("User_pseudo"), res.getInt("channel_idChannel"));
             m.getManyToOneReferences().put("channel", res.getInt("Channel_idChannel"));
-
-            PreparedStatement userStmt = conn.prepareStatement("SELECT * FROM User where pseudo = ?");
-            userStmt.setString(1, res.getString("User_pseudo"));
-            ResultSet userRes = userStmt.executeQuery();
-            userRes.next();
-            m.getManyToOneReferences().put("user", userRes.getString("pseudo"));
-
             m.setKey(res.getInt("idMessage"));
             return m;
         } catch (SQLException e) {
@@ -107,15 +100,7 @@ public class MessageRepository implements IRepository<Message, Integer> {
             ResultSet res = pstmt.executeQuery();
 
             while (res.next()) {
-                Message m = new Message(res.getString("content"), res.getDate("date"));
-                m.getManyToOneReferences().put("channel", res.getInt("Channel_idChannel"));
-
-                PreparedStatement userStmt = conn.prepareStatement("SELECT * FROM User where pseudo = ?");
-                userStmt.setString(1, res.getString("User_pseudo"));
-                ResultSet userRes = userStmt.executeQuery();
-                userRes.next();
-                m.getManyToOneReferences().put("user", userRes.getString("pseudo"));
-
+                Message m = new Message(res.getString("content"), res.getDate("date"), res.getString("User_pseudo"), res.getInt("channel_idChannel"));
                 m.setKey(res.getInt("idMessage"));
                 messages.add(m);
             }

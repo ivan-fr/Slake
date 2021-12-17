@@ -1,7 +1,9 @@
 package composite;
 
 import cache.CacheRepository;
+import models.Server;
 import models.User;
+import repository.ServerRepository;
 import repository.UserRepository;
 
 import java.util.ArrayList;
@@ -52,6 +54,16 @@ public class CompositeUserRepository implements IComposite<User, String> {
     public User update(User object) {
         User newUser = UserRepository.userRepository.update(object);
         userCacheRepository.update(object, newUser);
+        return newUser;
+    }
+
+    public User addServer(User user, Server server) {
+        User newUser = UserRepository.userRepository.addServer(user, server);
+        userCacheRepository.update(user, newUser);
+        CompositeServerRepository.compositeServerRepository.serverCacheRepository.update(
+                server,
+                ServerRepository.serverRepository.get((Integer) server.getKey())
+        );
         return newUser;
     }
 

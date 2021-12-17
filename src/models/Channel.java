@@ -1,22 +1,24 @@
 package models;
 
+import composite.CompositeServerRepository;
+import composite.CompositeUserRepository;
+
 import java.util.ArrayList;
 
 public class Channel extends AbstractModel {
     private final String name;
-    private final ArrayList<Message> messages = new ArrayList<>();
-    private final Server server = null;
 
-    public Channel(String name) {
+    public Channel(String name, Integer idServer) {
         this.name = name;
+       this.getManyToOneReferences().put("server", idServer);
     }
 
     public Server getServer() {
-        return server;
+        return CompositeServerRepository.compositeServerRepository.get((Integer) this.getManyToOneReferences().get("server"));
     }
 
     public ArrayList<Message> getMessages() {
-        return messages;
+        return null;
     }
     
     public String getName() {
@@ -27,8 +29,7 @@ public class Channel extends AbstractModel {
     public String toString() {
         return "Channel{" +
                 "name='" + name + '\'' +
-                ", messages=" + messages +
-                ", server=" + server +
+                ", server=" + getServer() +
                 '}';
     }
 }
