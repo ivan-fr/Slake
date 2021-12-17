@@ -1,7 +1,6 @@
 package models;
 
-import composite.CompositeServerRepository;
-import composite.CompositeUserRepository;
+import composite.CompositeServerSingleton;
 
 import java.util.ArrayList;
 
@@ -14,7 +13,7 @@ public class Channel extends AbstractModel {
     }
 
     public Server getServer() {
-        return CompositeServerRepository.compositeServerRepository
+        return CompositeServerSingleton.compositeServerSingleton
                 .get((Integer) this.getManyToOneReferences().get("server"));
     }
 

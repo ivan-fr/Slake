@@ -7,11 +7,11 @@ import repository.ServerRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompositeServerRepository implements IComposite<Server, Integer> {
-    public final static CompositeServerRepository compositeServerRepository = new CompositeServerRepository();
+public class CompositeServerSingleton implements IComposite<Server, Integer> {
+    public final static CompositeServerSingleton compositeServerSingleton = new CompositeServerSingleton();
     public final CacheRepository<Server> serverCacheRepository = new CacheRepository<>();
 
-    private CompositeServerRepository() {
+    private CompositeServerSingleton() {
 
     }
 

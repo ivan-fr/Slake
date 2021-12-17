@@ -9,11 +9,11 @@ import repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompositeUserRepository implements IComposite<User, String> {
-    public final static CompositeUserRepository compositeUserRepository = new CompositeUserRepository();
+public class CompositeUserSingleton implements IComposite<User, String> {
+    public final static CompositeUserSingleton compositeUserSingleton = new CompositeUserSingleton();
     private final CacheRepository<User> userCacheRepository = new CacheRepository<>();
 
-    private CompositeUserRepository() {
+    private CompositeUserSingleton() {
 
     }
 
@@ -60,7 +60,7 @@ public class CompositeUserRepository implements IComposite<User, String> {
     public User addServer(User user, Server server) {
         User newUser = UserRepository.userRepository.addServer(user, server);
         userCacheRepository.update(user, newUser);
-        CompositeServerRepository.compositeServerRepository.serverCacheRepository
+        CompositeServerSingleton.compositeServerSingleton.serverCacheRepository
                 .update(server, ServerRepository.serverRepository.get((Integer) server.getKey()));
         return newUser;
     }

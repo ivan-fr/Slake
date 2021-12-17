@@ -1,6 +1,6 @@
 package models;
 
-import composite.CompositeServerRepository;
+import composite.CompositeServerSingleton;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class User extends AbstractModel {
     public ArrayList<Server> getServers() {
         this.servers.clear();
         for (Object ref : this.getManyToManyReferences().get("server")) {
-            this.servers.add(CompositeServerRepository.compositeServerRepository.get((Integer) ref));
+            this.servers.add(CompositeServerSingleton.compositeServerSingleton.get((Integer) ref));
         }
 
         return servers;
@@ -28,7 +28,7 @@ public class User extends AbstractModel {
     @Override
     public String toString() {
         return "User { "
-                + ", pseudo='" + pseudo
-                + "', servers=" + servers + " }";
+                + "pseudo='" + pseudo
+                + ", servers=" + servers + " }";
     }
 }

@@ -1,7 +1,7 @@
 package models;
 
-import composite.CompositeChannelRepository;
-import composite.CompositeUserRepository;
+import composite.CompositeChannelSingleton;
+import composite.CompositeUserSingleton;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ public class Server extends AbstractModel {
     public ArrayList<User> getUsers() {
         this.users.clear();
         for (Object ref : this.getManyToManyReferences().get("user")) {
-            this.users.add(CompositeUserRepository.compositeUserRepository.get((String) ref));
+            this.users.add(CompositeUserSingleton.compositeUserSingleton.get((String) ref));
         }
 
         return users;
@@ -27,7 +27,7 @@ public class Server extends AbstractModel {
     public ArrayList<Channel> getChannels() {
         this.channels.clear();
         for (Object ref : this.getManyToManyReferences().get("server")) {
-            this.channels.add(CompositeChannelRepository.compositeChannelRepository.get((Integer) ref));
+            this.channels.add(CompositeChannelSingleton.compositeChannelSingleton.get((Integer) ref));
         }
 
         return channels;

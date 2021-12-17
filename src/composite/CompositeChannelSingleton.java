@@ -7,11 +7,11 @@ import repository.ChannelRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompositeChannelRepository implements IComposite<Channel, Integer> {
-    public final static CompositeChannelRepository compositeChannelRepository = new CompositeChannelRepository();
+public class CompositeChannelSingleton implements IComposite<Channel, Integer> {
+    public final static CompositeChannelSingleton compositeChannelSingleton = new CompositeChannelSingleton();
     private final CacheRepository<Channel> channelCacheRepository = new CacheRepository<>();
 
-    private CompositeChannelRepository() {
+    private CompositeChannelSingleton() {
 
     }
 

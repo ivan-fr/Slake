@@ -7,11 +7,11 @@ import repository.MessageRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompositeMessageRepository implements IComposite<Message, Integer> {
-    public final static CompositeMessageRepository compositeMessageRepository = new CompositeMessageRepository();
+public class CompositeMessageSingleton implements IComposite<Message, Integer> {
+    public final static CompositeMessageSingleton compositeMessageSingleton = new CompositeMessageSingleton();
     private final CacheRepository<Message> messageCacheRepository = new CacheRepository<>();
 
-    private CompositeMessageRepository() {
+    private CompositeMessageSingleton() {
 
     }
 

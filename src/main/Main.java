@@ -1,7 +1,12 @@
 package main;
 
-import controllers.UserController;
+import composite.CompositeChannelSingleton;
+import composite.CompositeMessageSingleton;
+import composite.CompositeServerSingleton;
+import composite.CompositeUserSingleton;
 import models.User;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,6 +19,17 @@ public class Main {
             System.out.println("Mysql implementation error.");
         }
 
+
+        CompositeUserSingleton.compositeUserSingleton.hydrate();
+        CompositeServerSingleton.compositeServerSingleton.hydrate();
+        CompositeChannelSingleton.compositeChannelSingleton.hydrate();
+        CompositeMessageSingleton.compositeMessageSingleton.hydrate();
+
+        List<User> users = CompositeUserSingleton.compositeUserSingleton.list();
+
+        for (User user : users) {
+            System.out.println(user.toString());
+        }
 
     }
 }

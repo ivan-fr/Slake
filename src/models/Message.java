@@ -1,7 +1,7 @@
 package models;
 
-import composite.CompositeChannelRepository;
-import composite.CompositeUserRepository;
+import composite.CompositeChannelSingleton;
+import composite.CompositeUserSingleton;
 
 import java.util.Date;
 
@@ -25,12 +25,12 @@ public class Message extends AbstractModel {
     }
 
     public Channel getChannel() {
-        return CompositeChannelRepository.compositeChannelRepository
+        return CompositeChannelSingleton.compositeChannelSingleton
                 .get((Integer) this.getManyToOneReferences().get("channel"));
     }
 
     public User getUser() {
-        return CompositeUserRepository.compositeUserRepository
+        return CompositeUserSingleton.compositeUserSingleton
                 .get((String) this.getManyToOneReferences().get("user"));
     }
 
