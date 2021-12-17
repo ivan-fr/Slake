@@ -18,7 +18,7 @@ public class MessageRepository implements IRepository<Message, Integer> {
             PreparedStatement createStmt = conn.prepareStatement("INSERT INTO Message (content, Channel_idChannel, date, User_pseudo) VALUES (?, ?, now(), ?)", Statement.RETURN_GENERATED_KEYS);
             createStmt.setString(1, object.getContent());
             createStmt.setInt(2, (Integer) object.getChannel().getKey());
-            createStmt.setInt(3, (Integer) object.getUser().getKey());
+            createStmt.setString(3, (String) object.getUser().getKey());
             createStmt.executeUpdate();
             ResultSet res = createStmt.getGeneratedKeys();
             res.next();

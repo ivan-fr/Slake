@@ -15,7 +15,7 @@ public class ServerRepository implements IRepository<Server, Integer> {
 
         try {
             assert conn != null;
-            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO Server (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO Server (name, userCounter) VALUES (?, 0)", Statement.RETURN_GENERATED_KEYS);
             createStmt.setString(1, object.getName());
             createStmt.executeUpdate();
             ResultSet res = createStmt.getGeneratedKeys();
