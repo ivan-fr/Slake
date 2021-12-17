@@ -10,7 +10,7 @@ public class User extends AbstractModel {
 
     public ArrayList<Server> getServers() {
         this.servers.clear();
-        for (Object ref : this.getManyToManyReferences().get("server")) {
+        for (Object ref : this.getManyToManyReferences().get("servers")) {
             this.servers.add(CompositeServerSingleton.compositeServerSingleton.get((Integer) ref));
         }
 
