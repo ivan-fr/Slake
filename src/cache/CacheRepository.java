@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CacheRepository<T> {
+public class CacheRepository<T extends AbstractModel> {
 
     private final HashMap<Object, T> map = new HashMap<>();
 
@@ -15,21 +15,21 @@ public class CacheRepository<T> {
         return map;
     }
 
-    public T save(AbstractModel instance) {
-        map.put(instance.getKey(), (T) instance);
-        return (T) instance;
+    public T save(T instance) {
+        map.put(instance.getKey(), instance);
+        return instance;
     }
 
     public T get(Object key) {
-        return (T) map.get(key);
+        return map.get(key);
     }
 
-    public boolean delete(AbstractModel instance) {
-        return map.remove(instance.getKey(), (T) instance);
+    public boolean delete(T instance) {
+        return map.remove(instance.getKey(), instance);
     }
 
-    public void update(AbstractModel oldInstance, AbstractModel newInstance) {
-        map.replace(newInstance.getKey(), (T) oldInstance, (T) newInstance);
+    public void update(T oldInstance, T newInstance) {
+        map.replace(newInstance.getKey(), oldInstance, newInstance);
     }
 
     public List<T> list() {
