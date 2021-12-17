@@ -57,7 +57,5 @@ public class Seed {
         } catch (Exception e) {
             System.out.println("Seed fail");
         }
-
-
     }
 }
