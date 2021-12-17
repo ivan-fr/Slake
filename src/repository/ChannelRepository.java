@@ -46,6 +46,17 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
             Channel c = new Channel(res.getString("name"), res.getInt("Server_idServer"));
             c.getManyToOneReferences().put("server", res.getInt("Server_idServer"));
             c.setKey(res.getInt("idChannel"));
+
+            PreparedStatement stmtMessages = conn.prepareStatement("SELECT * from Message m join Channel C on C.idChannel = m.Channel_idChannel where idChannel = ?");
+            stmtMessages.setInt(1, key);
+            ResultSet resMessages = stmtMessages.executeQuery();
+
+            c.getOneToManyReferences().put("messages", new ArrayList<>());
+
+            while (resMessages.next()) {
+                c.getOneToManyReferences().get("messages").add(resMessages.getInt("idMessage"));
+            }
+
             return c;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,10 +111,20 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
             ResultSet res = pstmt.executeQuery();
 
             while (res.next()) {
-                Channel s = new Channel(res.getString("name"), res.getInt("Server_idServer"));
-                s.getManyToOneReferences().put("server", res.getInt("Server_idServer"));
-                s.setKey(res.getInt("idChannel"));
-                channels.add(s);
+                Channel c = new Channel(res.getString("name"), res.getInt("Server_idServer"));
+                c.getManyToOneReferences().put("server", res.getInt("Server_idServer"));
+                c.setKey(res.getInt("idChannel"));
+                channels.add(c);
+
+                c.getOneToManyReferences().put("messages", new ArrayList<>());
+
+                PreparedStatement stmtMessages = conn.prepareStatement("SELECT * from Message m join Channel C on C.idChannel = m.Channel_idChannel where idChannel = ?");
+                stmtMessages.setInt(1, res.getInt("idChannel"));
+                ResultSet resMessages = stmtMessages.executeQuery();
+
+                while (resMessages.next()) {
+                    c.getOneToManyReferences().get("messages").add(resMessages.getInt("idMessage"));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
