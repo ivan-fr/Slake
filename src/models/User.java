@@ -25,6 +25,7 @@ public class User extends AbstractModel {
         this.pseudo = pseudo;
     }
 
+
     @Override
     public String toString() {
         return "User { "
