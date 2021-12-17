@@ -47,7 +47,7 @@ public class MessageRepository implements IRepository<Message, Integer> {
             m.getManyToOneReferences().put("channel", res.getInt("Channel_idChannel"));
 
             PreparedStatement userStmt = conn.prepareStatement("SELECT * FROM User where pseudo = ?");
-            userStmt.setInt(1, res.getInt("User_pseudo"));
+            userStmt.setString(1, res.getString("User_pseudo"));
             ResultSet userRes = userStmt.executeQuery();
             userRes.next();
             m.getManyToOneReferences().put("user", userRes.getString("pseudo"));
@@ -111,7 +111,7 @@ public class MessageRepository implements IRepository<Message, Integer> {
                 m.getManyToOneReferences().put("channel", res.getInt("Channel_idChannel"));
 
                 PreparedStatement userStmt = conn.prepareStatement("SELECT * FROM User where pseudo = ?");
-                userStmt.setInt(1, res.getInt("User_pseudo"));
+                userStmt.setString(1, res.getString("User_pseudo"));
                 ResultSet userRes = userStmt.executeQuery();
                 userRes.next();
                 m.getManyToOneReferences().put("user", userRes.getString("pseudo"));

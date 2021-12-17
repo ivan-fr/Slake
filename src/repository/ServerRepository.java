@@ -51,7 +51,7 @@ public class ServerRepository implements IRepository<Server, Integer> {
             ResultSet resUser = stmt.executeQuery();
 
             while (resUser.next()) {
-                s.getManyToManyReferences().get("users").add(resUser.getInt("pseudo"));
+                s.getManyToManyReferences().get("users").add(resUser.getString("pseudo"));
             }
 
             return s;
@@ -117,7 +117,7 @@ public class ServerRepository implements IRepository<Server, Integer> {
                 ResultSet resUser = stmt.executeQuery();
 
                 while (resUser.next()) {
-                    s.getManyToManyReferences().get("users").add(resUser.getInt("pseudo"));
+                    s.getManyToManyReferences().get("users").add(resUser.getString("pseudo"));
                 }
 
                 servers.add(s);
