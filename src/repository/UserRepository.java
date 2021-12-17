@@ -14,15 +14,17 @@ public class UserRepository implements IRepository<User, String> {
     }
 
     @Override
-    public User save(User object) {
+    public User save(User user) {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO User (pseudo) VALUES (?)",
+            PreparedStatement createStmt = conn.prepareStatement(
+                    "INSERT INTO User (username, password) VALUES (?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
-            createStmt.setString(1, object.getPseudo());
+            createStmt.setString(1, user.getUsername());
+            createStmt.setString(2, user.getPassword());
             createStmt.executeUpdate();
-            return get(object.getPseudo());
+            return get(user.getUsername());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,7 +36,7 @@ public class UserRepository implements IRepository<User, String> {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * from User u where pseudo = ? LIMIT 1");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * from User u where username = ? LIMIT 1");
             pstmt.setString(1, key);
             ResultSet res = pstmt.executeQuery();
 
@@ -42,13 +44,13 @@ public class UserRepository implements IRepository<User, String> {
                 return null;
             }
 
-            User u = new User(res.getString("pseudo"));
-            u.setKey(res.getString("pseudo"));
+            User u = new User(res.getString("username"), res.getString("password"));
+            u.setKey(res.getString("username"));
 
             u.getManyToManyReferences().put("servers", new ArrayList<>());
 
             PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT * from Server JOIN Server_has_User ShU on Server.idServer = ShU.Server_idServer JOIN User U on U.pseudo = ShU.User_pseudo where pseudo = ?");
+                    "SELECT * from Server JOIN Server_has_User ShU on Server.idServer = ShU.Server_idServer JOIN User U on U.username = ShU.User_username where username = ?");
             stmt.setString(1, key);
             ResultSet resServer = stmt.executeQuery();
 
@@ -69,7 +71,7 @@ public class UserRepository implements IRepository<User, String> {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM User WHERE pseudo = ?");
+            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM User WHERE username = ?");
             pstmt.setString(1, key);
             pstmt.execute();
 
@@ -82,16 +84,17 @@ public class UserRepository implements IRepository<User, String> {
     }
 
     @Override
-    public User update(User object) {
+    public User update(User user) {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement pstmt = conn.prepareStatement("UPDATE User  SET pseudo = ? WHERE pseudo = ?");
-            pstmt.setString(1, object.getPseudo());
-            pstmt.setString(2, object.getPseudo());
+            PreparedStatement pstmt = conn.prepareStatement("UPDATE User SET username = ?, password = ? WHERE username = ?");
+            pstmt.setString(1, user.getUsername());
+            pstmt.setString(2, user.getPassword());
+            pstmt.setString(3, user.getUsername());
             pstmt.execute();
 
-            return get(object.getPseudo());
+            return get(user.getUsername());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -110,14 +113,14 @@ public class UserRepository implements IRepository<User, String> {
             ResultSet res = pstmt.executeQuery();
 
             while (res.next()) {
-                User u = new User(res.getString("pseudo"));
-                u.setKey(res.getString("pseudo"));
+                User u = new User(res.getString("username"), res.getString("password"));
+                u.setKey(res.getString("username"));
 
                 u.getManyToManyReferences().put("servers", new ArrayList<>());
 
                 PreparedStatement stmt = conn.prepareStatement(
-                        "SELECT * from Server Join Server_has_User ShU on Server.idServer = ShU.Server_idServer JOIN User U on U.pseudo = ShU.User_pseudo where pseudo = ?");
-                stmt.setString(1, res.getString("pseudo"));
+                        "SELECT * from Server Join Server_has_User ShU on Server.idServer = ShU.Server_idServer JOIN User U on U.username = ShU.User_username where username = ?");
+                stmt.setString(1, res.getString("username"));
                 ResultSet resServer = stmt.executeQuery();
 
                 while (resServer.next()) {
@@ -138,7 +141,7 @@ public class UserRepository implements IRepository<User, String> {
         try {
             assert conn != null;
             PreparedStatement createStmt = conn.prepareStatement(
-                    "INSERT INTO Server_has_User (Server_idServer, User_pseudo) VALUES (?, ?)",
+                    "INSERT INTO Server_has_User (Server_idServer, User_username) VALUES (?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
             createStmt.setInt(1, (Integer) server.getKey());
             createStmt.setString(2, (String) user.getKey());

@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class User extends AbstractModel {
-    private final String pseudo;
+    private final String username;
+    private final String password;
     private final ArrayList<Server> servers = new ArrayList<>();
 
     public ArrayList<Server> getServers() {
@@ -16,26 +17,42 @@ public class User extends AbstractModel {
         }
         return servers;
     }
-
-    public String getPseudo() {
-        return pseudo;
+    
+    public User(String username) {
+        this.username = username;
+        this.password = "";
     }
 
-    public User(String pseudo) {
-        this.pseudo = pseudo;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     @Override
     public String toString() {
-        return String.format("""
-                User's pseudo: %s
-                %s
-                """, pseudo, getServers().stream()
-                .map(Server::toString)
-                .collect(Collectors.joining("", "", "")));
+        return String.format(
+            """
+            User {
+                username = %s
+                password = ******
+                servers = %s
+            }
+            """,
+            username,
+            getServers().stream().map(Server::toString)
+            .collect(Collectors.joining("", "", ""))
+        );
     }
 
     public String toStringWithoutRelation() {
-        return String.format("%s", pseudo);
+        return String.format("%s", username);
     }
 }
