@@ -19,7 +19,6 @@ public class Main {
             System.out.println("Mysql implementation error.");
         }
 
-
         CompositeUserSingleton.compositeUserSingleton.hydrate();
         CompositeServerSingleton.compositeServerSingleton.hydrate();
         CompositeChannelSingleton.compositeChannelSingleton.hydrate();
