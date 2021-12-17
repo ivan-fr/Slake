@@ -29,6 +29,6 @@ public class User extends AbstractModel {
     public String toString() {
         return "User { "
                 + "pseudo='" + pseudo
-                + ", servers=" + servers + " }";
+                + ", servers=" + getServers() + " }";
     }
 }
