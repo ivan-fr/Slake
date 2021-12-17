@@ -18,7 +18,8 @@ public class UserRepository implements IRepository<User, String> {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO User (pseudo) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO User (pseudo) VALUES (?)",
+                    Statement.RETURN_GENERATED_KEYS);
             createStmt.setString(1, object.getPseudo());
             createStmt.executeUpdate();
             return get(object.getPseudo());
@@ -46,7 +47,8 @@ public class UserRepository implements IRepository<User, String> {
 
             u.getManyToManyReferences().put("servers", new ArrayList<>());
 
-            PreparedStatement stmt = conn.prepareStatement("SELECT * from Server JOIN Server_has_User ShU on Server.idServer = ShU.Server_idServer JOIN User U on U.pseudo = ShU.User_pseudo where pseudo = ?");
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT * from Server JOIN Server_has_User ShU on Server.idServer = ShU.Server_idServer JOIN User U on U.pseudo = ShU.User_pseudo where pseudo = ?");
             stmt.setString(1, key);
             ResultSet resServer = stmt.executeQuery();
 
@@ -113,7 +115,8 @@ public class UserRepository implements IRepository<User, String> {
 
                 u.getManyToManyReferences().put("servers", new ArrayList<>());
 
-                PreparedStatement stmt = conn.prepareStatement("SELECT * from Server Join Server_has_User ShU on Server.idServer = ShU.Server_idServer JOIN User U on U.pseudo = ShU.User_pseudo where pseudo = ?");
+                PreparedStatement stmt = conn.prepareStatement(
+                        "SELECT * from Server Join Server_has_User ShU on Server.idServer = ShU.Server_idServer JOIN User U on U.pseudo = ShU.User_pseudo where pseudo = ?");
                 stmt.setString(1, res.getString("pseudo"));
                 ResultSet resServer = stmt.executeQuery();
 
@@ -134,7 +137,9 @@ public class UserRepository implements IRepository<User, String> {
         Connection conn = SingletonConnection.connection;
         try {
             assert conn != null;
-            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO Server_has_User (Server_idServer, User_pseudo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement createStmt = conn.prepareStatement(
+                    "INSERT INTO Server_has_User (Server_idServer, User_pseudo) VALUES (?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
             createStmt.setInt(1, (Integer) server.getKey());
             createStmt.setString(2, (String) user.getKey());
             createStmt.executeUpdate();

@@ -10,17 +10,18 @@ public class Channel extends AbstractModel {
 
     public Channel(String name, Integer idServer) {
         this.name = name;
-       this.getManyToOneReferences().put("server", idServer);
+        this.getManyToOneReferences().put("server", idServer);
     }
 
     public Server getServer() {
-        return CompositeServerRepository.compositeServerRepository.get((Integer) this.getManyToOneReferences().get("server"));
+        return CompositeServerRepository.compositeServerRepository
+                .get((Integer) this.getManyToOneReferences().get("server"));
     }
 
     public ArrayList<Message> getMessages() {
         return null;
     }
-    
+
     public String getName() {
         return name;
     }

@@ -60,10 +60,8 @@ public class CompositeUserRepository implements IComposite<User, String> {
     public User addServer(User user, Server server) {
         User newUser = UserRepository.userRepository.addServer(user, server);
         userCacheRepository.update(user, newUser);
-        CompositeServerRepository.compositeServerRepository.serverCacheRepository.update(
-                server,
-                ServerRepository.serverRepository.get((Integer) server.getKey())
-        );
+        CompositeServerRepository.compositeServerRepository.serverCacheRepository
+                .update(server, ServerRepository.serverRepository.get((Integer) server.getKey()));
         return newUser;
     }
 

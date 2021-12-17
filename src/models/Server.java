@@ -43,6 +43,7 @@ public class Server extends AbstractModel {
 
     @Override
     public String toString() {
-        return "Server{" + "userCounter=" + userCounter + ", name='" + name + '\'' + ", channels=" + channels + ", users=" + users + '}';
+        return "Server{" + "userCounter=" + userCounter + ", name='" + name + '\'' + ", channels=" + channels
+                + ", users=" + users + '}';
     }
 }

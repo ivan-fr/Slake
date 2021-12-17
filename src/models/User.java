@@ -4,7 +4,7 @@ import composite.CompositeServerRepository;
 
 import java.util.ArrayList;
 
-public class User extends AbstractModel{
+public class User extends AbstractModel {
     private final String pseudo;
     private final ArrayList<Server> servers = new ArrayList<>();
 

@@ -9,7 +9,7 @@ public class Main {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             System.out.println("Mysql implementation is OK.");
 
-//            System.out.println(u);
+            // System.out.println(u);
         } catch (Exception ex) {
             System.out.println("Mysql implementation error.");
         }

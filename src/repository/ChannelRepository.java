@@ -15,7 +15,8 @@ public class ChannelRepository implements IRepository<Channel, Integer> {
 
         try {
             assert conn != null;
-            PreparedStatement createStmt = conn.prepareStatement("INSERT INTO Channel (Server_idServer, name) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement createStmt = conn.prepareStatement(
+                    "INSERT INTO Channel (Server_idServer, name) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
             createStmt.setInt(1, (Integer) object.getServer().getKey());
             createStmt.setString(2, object.getName());
             createStmt.executeUpdate();

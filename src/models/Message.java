@@ -25,11 +25,13 @@ public class Message extends AbstractModel {
     }
 
     public Channel getChannel() {
-        return CompositeChannelRepository.compositeChannelRepository.get((Integer) this.getManyToOneReferences().get("channel"));
+        return CompositeChannelRepository.compositeChannelRepository
+                .get((Integer) this.getManyToOneReferences().get("channel"));
     }
 
     public User getUser() {
-        return CompositeUserRepository.compositeUserRepository.get((String) this.getManyToOneReferences().get("user"));
+        return CompositeUserRepository.compositeUserRepository
+                .get((String) this.getManyToOneReferences().get("user"));
     }
 
     @Override
