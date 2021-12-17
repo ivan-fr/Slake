@@ -21,16 +21,16 @@ public class Seed {
             userRepository.save(u);
 
             User u1 = new User("user2");
-            userRepository.save(u);
+            userRepository.save(u1);
 
             User u2 = new User("user3");
-            userRepository.save(u);
+            userRepository.save(u2);
 
             User u3 = new User("user4");
-            userRepository.save(u);
+            userRepository.save(u3);
 
             User u4 = new User("user5");
-            userRepository.save(u);
+            userRepository.save(u4);
 
             Server s = new Server("server1");
             serverRepository.save(s);
