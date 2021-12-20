@@ -32,4 +32,8 @@ public class User extends AbstractModel {
                 + "pseudo='" + pseudo
                 + ", servers=" + getServers() + " }";
     }
+
+    public String toStringWithoutRelation() {
+        return "User { pseudo='" + pseudo + "}";
+    }
 }

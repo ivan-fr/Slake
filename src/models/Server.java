@@ -51,4 +51,11 @@ public class Server extends AbstractModel {
             + "', channels=" + getChannels()
             + ", users=" + users + " }";
     }
+
+    public String toStringWithoutRelation() {
+        return "Server { "
+                + "userCounter=" + userCounter
+                + ", name='" + name
+                + ", users=" + users + " }";
+    }
 }

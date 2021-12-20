@@ -28,4 +28,8 @@ public abstract class AbstractModel {
     public void setKey(Object key) {
         this.key = key;
     }
+
+    public String toStringWithoutRelation() {
+        return "";
+    }
 }

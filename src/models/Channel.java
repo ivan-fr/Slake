@@ -40,4 +40,8 @@ public class Channel extends AbstractModel {
                 + "', server=" +
                 ", messages=" + getMessages() +" }";
     }
+
+    public String toStringWithoutRelation() {
+        return "Channel { name='" + name + "}";
+    }
 }

@@ -38,6 +38,13 @@ public class Message extends AbstractModel {
     public String toString() {
         return "Message { "
             + "content='" + content
-            + "', date=" + date + " }";
+            + "', date=" + date + "" +
+            "user: " +  getUser().toStringWithoutRelation() + " }";
+    }
+
+    public String toStringWithoutRelation() {
+        return "Message { "
+                + "content='" + content
+                + "', date=" + date + " }";
     }
 }
