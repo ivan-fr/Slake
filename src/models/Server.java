@@ -4,14 +4,17 @@ import composite.CompositeChannelSingleton;
 import composite.CompositeUserSingleton;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class Server extends AbstractModel {
-    private final Integer userCounter = 0;
+    private AtomicInteger userCounter = new AtomicInteger(0);
     private final String name;
-    private final ArrayList<Channel> channels = new ArrayList<>();
-    private final ArrayList<User> users = new ArrayList<>();
+    private final List<Channel> channels = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
-    public ArrayList<User> getUsers() {
+    public List<User> getUsers() {
         this.users.clear();
         for (Object ref : this.getManyToManyReferences().get("user")) {
             this.users.add(CompositeUserSingleton.compositeUserSingleton.get((String) ref));
@@ -24,17 +27,17 @@ public class Server extends AbstractModel {
         this.name = name;
     }
 
-    public ArrayList<Channel> getChannels() {
-        this.channels.clear();
-        for (Object ref : this.getManyToManyReferences().get("server")) {
+    public List<Channel> getChannels() {
+        channels.clear();
+        for (Object ref : this.getOneToManyReferences().get("channels")) {
             this.channels.add(CompositeChannelSingleton.compositeChannelSingleton.get((Integer) ref));
         }
 
         return channels;
     }
 
-    public Integer getUserCounter() {
-        return userCounter;
+    public int getUserCounter() {
+        return userCounter.get();
     }
 
     public String getName() {
@@ -43,10 +46,15 @@ public class Server extends AbstractModel {
 
     @Override
     public String toString() {
-        return "Server { "
-            + "userCounter=" + userCounter
-            + ", name='" + name
-            + "', channels=" + channels
-            + ", users=" + users + " }";
+        return String.format("""
+                            Server's name: %s
+                            %s
+                        """, name, getChannels().stream()
+                        .map(Channel::toString)
+                        .collect(Collectors.joining("", "", "")));
+    }
+
+    public String toStringWithoutRelation() {
+        return String.format("Server's name: %s", name);
     }
 }

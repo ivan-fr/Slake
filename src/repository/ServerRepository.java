@@ -56,6 +56,16 @@ public class ServerRepository implements IRepository<Server, Integer> {
                 s.getManyToManyReferences().get("users").add(resUser.getString("pseudo"));
             }
 
+            PreparedStatement stmtChannels = conn.prepareStatement("SELECT * from Channel join Server S on S.idServer = Channel.Server_idServer where idServer = ?");
+            stmtChannels.setInt(1, resServer.getInt("idServer"));
+            ResultSet resChannels = stmtChannels.executeQuery();
+
+            s.getOneToManyReferences().put("channels", new ArrayList<>());
+
+            while (resChannels.next()) {
+                s.getOneToManyReferences().get("channels").add(resChannels.getInt("idChannel"));
+            }
+
             return s;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,6 +131,16 @@ public class ServerRepository implements IRepository<Server, Integer> {
 
                 while (resUser.next()) {
                     s.getManyToManyReferences().get("users").add(resUser.getString("pseudo"));
+                }
+
+                PreparedStatement stmtChannels = conn.prepareStatement("SELECT * from Channel join Server S on S.idServer = Channel.Server_idServer where idServer = ?");
+                stmtChannels.setInt(1, res.getInt("idServer"));
+                ResultSet resChannels = stmtChannels.executeQuery();
+
+                s.getOneToManyReferences().put("channels", new ArrayList<>());
+
+                while (resChannels.next()) {
+                    s.getOneToManyReferences().get("channels").add(resChannels.getInt("idChannel"));
                 }
 
                 servers.add(s);
