@@ -5,6 +5,7 @@ import composite.CompositeServerSingleton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Channel extends AbstractModel {
     private final String name;
@@ -35,13 +36,15 @@ public class Channel extends AbstractModel {
 
     @Override
     public String toString() {
-        return "Channel { "
-                + "name='" + name
-                + "', server=" +
-                ", messages=" + getMessages() +" }";
+        return String.format("""
+                    Channel's name: %s
+                %s
+                """, name, getMessages().stream()
+                .map(Message::toString)
+                .collect(Collectors.joining("", "", "")));
     }
 
     public String toStringWithoutRelation() {
-        return "Channel { name='" + name + "}";
+        return String.format("Channel's name: %s", name);
     }
 }

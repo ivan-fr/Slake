@@ -36,15 +36,19 @@ public class Message extends AbstractModel {
 
     @Override
     public String toString() {
-        return "Message { "
-            + "content='" + content
-            + "', date=" + date + "" +
-            "user: " +  getUser().toStringWithoutRelation() + " }";
+        return String.format("""
+                            Message:
+                                content: %s
+                                date: %s
+                                %s
+                """, content, date, getUser().toStringWithoutRelation());
     }
 
     public String toStringWithoutRelation() {
-        return "Message { "
-                + "content='" + content
-                + "', date=" + date + " }";
+        return String.format("""
+                Message:
+                    content: %s
+                    date: %s
+                    """, content, date);
     }
 }

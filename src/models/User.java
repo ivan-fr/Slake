@@ -3,6 +3,7 @@ package models;
 import composite.CompositeServerSingleton;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class User extends AbstractModel {
     private final String pseudo;
@@ -28,12 +29,15 @@ public class User extends AbstractModel {
 
     @Override
     public String toString() {
-        return "User { "
-                + "pseudo='" + pseudo
-                + ", servers=" + getServers() + " }";
+        return  String.format("""
+               User's pseudo: %s
+               %s
+               """, pseudo, getServers().stream()
+                .map(Server::toString)
+                .collect(Collectors.joining("", "", "")));
     }
 
     public String toStringWithoutRelation() {
-        return "User { pseudo='" + pseudo + "}";
+        return  String.format("User's pseudo: %s", pseudo);
     }
 }

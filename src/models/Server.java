@@ -6,6 +6,7 @@ import composite.CompositeUserSingleton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class Server extends AbstractModel {
     private AtomicInteger userCounter = new AtomicInteger(0);
@@ -45,17 +46,15 @@ public class Server extends AbstractModel {
 
     @Override
     public String toString() {
-        return "Server { "
-            + "userCounter=" + userCounter
-            + ", name='" + name
-            + "', channels=" + getChannels()
-            + ", users=" + users + " }";
+        return String.format("""
+                            Server's name: %s
+                            %s
+                        """, name, getChannels().stream()
+                        .map(Channel::toString)
+                        .collect(Collectors.joining("", "", "")));
     }
 
     public String toStringWithoutRelation() {
-        return "Server { "
-                + "userCounter=" + userCounter
-                + ", name='" + name
-                + ", users=" + users + " }";
+        return String.format("Server's name: %s", name);
     }
 }
