@@ -1,6 +1,8 @@
 package sockets;
 
 
+import models.User;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -10,14 +12,14 @@ public class Client {
     private Socket clientSocket ;
     private BufferedReader reader;
     private BufferedWriter writer;
-    private String username;
+    private User user;
 
-    public Client(Socket clientSocket, String username) {
+    public Client(Socket clientSocket, User user) {
         try {
             this.clientSocket = clientSocket;
             this.writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())) ;
             this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())) ;
-            this.username = username;
+            this.user = user;
         }catch(IOException e) {
             closeEverything(clientSocket, reader, writer) ;
         }
@@ -41,7 +43,18 @@ public class Client {
 
     public void sendMessages() {
         try {
-            writer.write(username);
+            // sending username
+            writer.write(user.getPseudo());
+            writer.newLine();
+            writer.flush();
+
+            // sending currentServer
+            writer.write(user.getCurrentServer());
+            writer.newLine();
+            writer.flush();
+
+            // sending currentChannel
+            writer.write(user.getCurrentChannel());
             writer.newLine();
             writer.flush();
 
@@ -49,7 +62,7 @@ public class Client {
             while (clientSocket.isConnected()) {
                 String message = scanner.nextLine();
                 if (!message.isEmpty() && !message.isBlank()){
-                    writer.write(username + ": " + message);
+                    writer.write(user.getPseudo() + ": " + message);
                     writer.newLine();
                     writer.flush();
                 }

@@ -36,6 +36,30 @@ public class Server extends AbstractModel {
         return channels;
     }
 
+    public List<String> getChannelsNames() {
+        List<Channel> channels = getChannels() ;
+        List<String> names = new ArrayList<>() ;
+        for (Channel channel : channels) {
+            names.add(channel.getName()) ;
+        }
+        return names;
+    }
+
+    public void showChannels() {
+        List<String> names = getChannelsNames() ;
+        for (String name : names) {
+            System.out.println("    " + name);
+        }
+    }
+
+    public boolean gotChannel(String name) {
+        for (Channel channel: channels) {
+            if(name.equals(channel.getName())) return true;
+        }
+        return false;
+    }
+
+
     public int getUserCounter() {
         return userCounter.get();
     }

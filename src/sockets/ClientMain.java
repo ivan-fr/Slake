@@ -4,6 +4,7 @@ import composite.CompositeChannelSingleton;
 import composite.CompositeMessageSingleton;
 import composite.CompositeServerSingleton;
 import composite.CompositeUserSingleton;
+import models.Server;
 import models.User;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class ClientMain {
         Scanner scanner = new Scanner(System.in) ;
 
 
-
+        //getting user
         boolean userExist = false;
         User connectedUser = null;
         String username = "" ;
@@ -49,12 +50,35 @@ public class ClientMain {
             if (!userExist) System.out.println("user not found in system! Try again");
         }
 
-        System.out.println("You are connected as " + username);
-        System.out.println("Here are all you Servers\n" + connectedUser.getServers().toString());
+        //getting server
+        connectedUser.showServers();
+        Server server;
+        String serverName;
+
+       do {
+           System.out.println("Choose a server: ");
+           serverName = scanner.nextLine();
+
+       }while ((server=connectedUser.getServer(serverName)) == null);
+
+
+        // getting channel
+        server.showChannels();
+        String channelName;
+        do {
+            System.out.println("Choose a channel from " + serverName +" : ");
+            channelName = scanner.nextLine();
+
+        }while (!server.gotChannel(channelName));
+
+        connectedUser.setCurrentServer(serverName);
+        connectedUser.setCurrentChannel(channelName);
+
+        System.out.println("You are connected as " + username + " to " +connectedUser.getCurrentServer() + "-" + connectedUser.getCurrentChannel());
 
         Socket socket = new Socket("localhost", 1255);
 
-        Client client = new Client(socket, connectedUser.getPseudo());
+        Client client = new Client(socket, connectedUser);
 
         client.receiveMessages();
         client.sendMessages();

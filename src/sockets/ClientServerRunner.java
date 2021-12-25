@@ -3,6 +3,7 @@ package sockets;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -13,6 +14,9 @@ public class ClientServerRunner implements Runnable {
     private BufferedReader reader;
     private BufferedWriter writer;
     private String username;
+    private String server ;
+    private String channel;
+
 
     public ClientServerRunner(Socket clientSocket) throws IOException {
         try {
@@ -20,7 +24,10 @@ public class ClientServerRunner implements Runnable {
             this.writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())) ;
             this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())) ;
             this.username = reader.readLine();
+            this.server = reader.readLine();
+            this.channel = reader.readLine();
             runningServers.add(this) ;
+            System.out.println(new Date() + " : " + username + " joined " + server + "-" + channel);
             broadcastMessage("Server: " + username + " has joined.") ;
         }catch(IOException e) {
             closeEverything(clientSocket, reader, writer) ;
@@ -47,7 +54,7 @@ public class ClientServerRunner implements Runnable {
     private void broadcastMessage(String message) {
         for (ClientServerRunner runningServer : runningServers) {
             try {
-                if(!runningServer.username.equals(this.username)) {
+                if(!runningServer.username.equals(this.username) && runningServer.server.equals(this.server) && runningServer.channel.equals(this.channel)) {
                     runningServer.writer.write(message);
                     runningServer.writer.newLine();
                     runningServer.writer.flush();
