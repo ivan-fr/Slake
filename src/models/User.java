@@ -14,7 +14,6 @@ public class User extends AbstractModel {
         for (Object ref : this.getManyToManyReferences().get("servers")) {
             this.servers.add(CompositeServerSingleton.compositeServerSingleton.get((Integer) ref));
         }
-
         return servers;
     }
 
