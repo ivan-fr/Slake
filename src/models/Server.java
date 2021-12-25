@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Server extends AbstractModel {
-    private AtomicInteger userCounter = new AtomicInteger(0);
+    private final AtomicInteger userCounter = new AtomicInteger(0);
     private final String name;
     private final List<Channel> channels = new ArrayList<>();
     private final List<User> users = new ArrayList<>();

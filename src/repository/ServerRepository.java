@@ -21,7 +21,9 @@ public class ServerRepository implements IRepository<Server, Integer> {
             createStmt.executeUpdate();
             ResultSet res = createStmt.getGeneratedKeys();
             res.next();
-            return get(res.getInt(1));
+            Server s = get(res.getInt(1));
+            createStmt.close();
+            return s;
         } catch (SQLException e) {
             e.printStackTrace();
         }
