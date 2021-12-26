@@ -45,6 +45,6 @@ public class Channel extends AbstractModel {
     }
 
     public String toStringWithoutRelation() {
-        return String.format("Channel's name: %s", name);
+        return String.format("\tChannel's name: %s", name);
     }
 }

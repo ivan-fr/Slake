@@ -71,10 +71,10 @@ public class Server extends AbstractModel {
     @Override
     public String toString() {
         return String.format("""
-                            Server's name: %s
+                        Server's name: %s
                             %s
                         """, name, getChannels().stream()
-                        .map(Channel::toString)
+                        .map(Channel::toStringWithoutRelation)
                         .collect(Collectors.joining("", "", "")));
     }
 

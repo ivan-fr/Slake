@@ -16,6 +16,10 @@ public class CacheRepository<T extends AbstractModel> {
     }
 
     public T save(T instance) {
+        if (instance == null) {
+            return null;
+        }
+
         map.put(instance.getKey(), instance);
         return instance;
     }

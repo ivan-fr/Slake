@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class ServerHandler {
 
-    private ServerSocket serverSocket;
+    private final ServerSocket serverSocket;
     private final static int PORT = 1255 ;
 
     public ServerHandler(ServerSocket serverSocket) {

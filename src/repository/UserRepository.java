@@ -147,6 +147,6 @@ public class UserRepository implements IRepository<User, String> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return get((String) user.getKey());
     }
 }
