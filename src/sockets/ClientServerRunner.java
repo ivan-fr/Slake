@@ -23,8 +23,11 @@ public class ClientServerRunner implements Runnable {
             this.clientSocket = clientSocket;
             this.writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())) ;
             this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())) ;
+            //reading username
             this.username = reader.readLine();
+            //reading server name
             this.server = reader.readLine();
+            //reading channel name
             this.channel = reader.readLine();
             runningServers.add(this) ;
             System.out.println(new Date() + " : " + username + " joined " + server + "-" + channel);
