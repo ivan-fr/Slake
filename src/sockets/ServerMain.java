@@ -10,8 +10,8 @@ public class ServerMain {
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(PORT);
-        Server server = new Server(serverSocket);
+        ServerHandler serverHandler = new ServerHandler(serverSocket);
         System.out.println("Server started.");
-        server.start();
+        serverHandler.start();
     }
 }

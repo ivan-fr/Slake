@@ -78,9 +78,9 @@ public class ClientMain {
 
         Socket socket = new Socket("localhost", 1255);
 
-        Client client = new Client(socket, connectedUser);
+        ClientHandler clientHandler = new ClientHandler(socket, connectedUser);
 
-        client.receiveMessages();
-        client.sendMessages();
+        clientHandler.receiveMessages();
+        clientHandler.sendMessages();
     }
 }

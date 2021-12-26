@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class ServerHandler {
 
     private ServerSocket serverSocket;
     private final static int PORT = 1255 ;
 
-    public Server(ServerSocket serverSocket) {
+    public ServerHandler(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
 

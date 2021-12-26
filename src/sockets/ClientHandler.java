@@ -7,14 +7,14 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client {
+public class ClientHandler {
 
     private Socket clientSocket ;
     private BufferedReader reader;
     private BufferedWriter writer;
     private User user;
 
-    public Client(Socket clientSocket, User user) {
+    public ClientHandler(Socket clientSocket, User user) {
         try {
             this.clientSocket = clientSocket;
             this.writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())) ;
