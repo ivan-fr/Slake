@@ -58,6 +58,7 @@ public class ClientHandler {
             writer.newLine();
             writer.flush();
 
+            //sending messages from user to server
             Scanner scanner = new Scanner(System.in);
             while (clientSocket.isConnected()) {
                 String message = scanner.nextLine();
@@ -79,6 +80,7 @@ public class ClientHandler {
             public void run() {
                 String message;
 
+                //reading messages from server
                 while (clientSocket.isConnected()) {
                     try {
                         message = reader.readLine();
