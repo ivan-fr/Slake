@@ -144,8 +144,7 @@ public class UserRepository implements IRepository<User, String> {
             createStmt.setString(2, (String) user.getKey());
             createStmt.executeUpdate();
             return get((String) user.getKey());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ignored) {
         }
         return get((String) user.getKey());
     }

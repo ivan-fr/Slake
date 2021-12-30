@@ -28,7 +28,9 @@ public class CompositeServerSingleton implements IComposite<Server, Integer> {
     public Server get(Integer key) {
         if (serverCacheRepository.get(key) == null) {
             Server u = ServerRepository.serverRepository.get(key);
-            serverCacheRepository.save(u);
+            System.out.println(u);
+            u = serverCacheRepository.save(u);
+            System.out.println(u);
             return u;
         }
 

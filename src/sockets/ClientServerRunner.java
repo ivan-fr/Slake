@@ -75,38 +75,63 @@ public class ClientServerRunner implements Runnable {
 
     public void showChannels() throws IOException {
         writer.write(String.valueOf(selectedServer));
+        writer.newLine();
+        writer.write("");
         writer.flush();
     }
 
     public void showServers() throws IOException {
         writer.write(
-                String.format("%s", CompositeServerSingleton.compositeServerSingleton.list().stream()
-                        .map(Server::toString)
-                        .collect(Collectors.joining("", "", ""))
+                String.format(
+                        "%s", CompositeServerSingleton.compositeServerSingleton.list().stream()
+                                .map(Server::toString)
+                                .collect(Collectors.joining("", "", ""))
                 )
         );
+        writer.newLine();
+        writer.write("");
         writer.flush();
     }
 
     public void joinServer() throws IOException {
+        if (me == null) {
+            System.out.println("me is null");
+            this.writer.write(-1);
+            this.writer.flush();
+            return;
+        }
+
         selectedServer = null;
         selectedChannel = null;
 
         Integer serverID = reader.read();
-
         selectedServer = CompositeServerSingleton.compositeServerSingleton.get(serverID);
-        me = CompositeUserSingleton.compositeUserSingleton.addServer(me, selectedServer);
 
-        if (selectedChannel == null) {
+        if (selectedServer == null) {
+            System.out.println("server channel not exist");
             this.writer.write(0);
             this.writer.flush();
-        } else {
-            this.writer.write(1);
-            this.writer.flush();
+            return;
         }
+
+        me = CompositeUserSingleton.compositeUserSingleton.addServer(me, selectedServer);
+        System.out.println(me.toStringWithoutRelation() + " join server " + selectedServer.toStringWithoutRelation());
+
+        this.writer.write(1);
+        this.writer.flush();
     }
 
     public void joinChannel() throws IOException {
+        if (me == null) {
+            this.writer.write(-1);
+            this.writer.flush();
+        }
+
+        if (selectedServer == null) {
+            this.writer.write(-1);
+            this.writer.flush();
+        }
+
         selectedChannel = null;
         Integer channelID = reader.read();
 
@@ -143,11 +168,14 @@ public class ClientServerRunner implements Runnable {
     }
 
     private void broadcastMessage(Message message) throws IOException {
+        System.out.println("broadcast message process");
         if (this.selectedServer == null) {
+            System.out.println("broadcast message process selected server is null");
             return;
         }
 
         if (this.selectedChannel == null) {
+            System.out.println("broadcast message process selected channel is null");
             return;
         }
 
@@ -161,12 +189,14 @@ public class ClientServerRunner implements Runnable {
             }
 
             try {
-                if (!runningServer.me.getPseudo().equals(this.me.getPseudo())
-                        && runningServer.selectedServer.equals(this.selectedServer)
+                if (runningServer.selectedServer.equals(this.selectedServer)
                         && runningServer.selectedChannel.equals(this.selectedChannel)) {
+                    System.out.println("go broadcast");
+
                     runningServer.writer.write(7);
-                    runningServer.writer.write(String.valueOf(message));
+                    runningServer.writer.write(String.valueOf(message.toStringWithoutRelation()));
                     runningServer.writer.newLine();
+                    runningServer.writer.write("");
                     runningServer.writer.flush();
                 }
             } catch (IOException ex) {

@@ -58,6 +58,14 @@ public class CompositeUserSingleton implements IComposite<User, String> {
     }
 
     public User addServer(User user, Server server) {
+        if (user == null) {
+            return null;
+        }
+
+        if (server == null) {
+            return null;
+        }
+
         User newUser = UserRepository.userRepository.addServer(user, server);
         userCacheRepository.update(user, newUser);
         CompositeServerSingleton.compositeServerSingleton.serverCacheRepository

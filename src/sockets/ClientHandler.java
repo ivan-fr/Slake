@@ -2,6 +2,7 @@ package sockets;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ClientHandler {
@@ -24,7 +25,11 @@ public class ClientHandler {
                 int choose;
 
                 if (!menu_mode) {
-                    choose = 8;
+                    try {
+                        sendMessage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     System.out.println("""
                             Choose a action:
@@ -33,16 +38,15 @@ public class ClientHandler {
                             3 - join a channel (required to join a server before)
                             4 - show servers
                             5 - show channels (required to join a server before)
-                            6 - disconnect
+                            6 - disconnect from server
                             """);
                     Scanner scanner = new Scanner(System.in);
                     choose = scanner.nextInt();
-                }
-
-                try {
-                    actionDispatcher(choose);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    try {
+                        actionDispatcher(choose);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }).start();
@@ -87,7 +91,6 @@ public class ClientHandler {
             int serverId = scanner.nextInt();
             writer.write(2);
             writer.write(serverId);
-            writer.newLine();
             writer.flush();
             first = false;
         } while (reader.read() == 0);
@@ -120,12 +123,11 @@ public class ClientHandler {
 
         threadMessage = new Thread(() -> {
             while (clientSocket.isConnected()) {
-                if (!menu_mode) {
-                    try {
-                        actionDispatcher(reader.read());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    int choose = reader.read();
+                    actionDispatcher(choose);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -136,21 +138,22 @@ public class ClientHandler {
         writer.write(4);
         writer.flush();
         String response;
-        while ((response = reader.readLine()) != null){
+        while (!Objects.equals(response = reader.readLine(), "")){
             System.out.println(response);
         }
+        System.out.println("OK.");
     }
 
     public void showChannels() throws IOException {
         writer.write(5);
         writer.flush();
         String response;
-        while ((response = reader.readLine()) != null){
+        while (!Objects.equals(response = reader.readLine(), "")){
             System.out.println(response);
         }
     }
 
-    public synchronized void actionDispatcher(Integer action) throws IOException {
+    public void actionDispatcher(Integer action) throws IOException {
         switch (action) {
             case 1 -> connection();
             case 2 -> joinServer();
@@ -187,8 +190,9 @@ public class ClientHandler {
     }
 
     public void receiveMessage() throws IOException {
+        System.out.println("read message...");
         String response;
-        while ((response = reader.readLine()) != null){
+        while (!Objects.equals(response = reader.readLine(), "")){
             System.out.println(response);
         }
     }
