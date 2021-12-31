@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 
 public class ClientServerRunner implements Runnable {
-
     public static List<ClientServerRunner> runningServers = new ArrayList<>();
     private final Socket clientSocket;
     private final BufferedReader reader;
