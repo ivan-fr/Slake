@@ -50,6 +50,7 @@ public class ClientServerRunner implements Runnable {
     }
 
     public void actionDispatcher(Integer action) throws IOException {
+        System.out.println("Receive action " + action);
         switch (action) {
             case 1 -> connection();
             case 2 -> joinServer();
@@ -59,11 +60,67 @@ public class ClientServerRunner implements Runnable {
             case 6 -> closeEverything(clientSocket, reader, writer);
             case 7 -> writeMessage();
             case 9 -> quitChannel();
+            case 10 -> createServer();
+            case 11 -> createChannel();
+            case 12 -> deleteServer();
+            case 13 -> deleteChannel();
         }
     }
 
-    public void quitChannel() {
+    public void deleteServer() throws IOException {
+        Integer serverId = this.reader.read();
+        CompositeServerSingleton.compositeServerSingleton.delete(serverId);
+
+        CompositeUserSingleton.compositeUserSingleton.hydrate();
+        CompositeServerSingleton.compositeServerSingleton.hydrate();
+        CompositeChannelSingleton.compositeChannelSingleton.hydrate();
+        CompositeMessageSingleton.compositeMessageSingleton.hydrate();
+
+        this.writer.write(1);
+        this.writer.flush();
+    }
+
+    public void deleteChannel() throws IOException {
+        Integer channelId = this.reader.read();
+        CompositeChannelSingleton.compositeChannelSingleton.delete(channelId);
+
+        CompositeUserSingleton.compositeUserSingleton.hydrate();
+        CompositeServerSingleton.compositeServerSingleton.hydrate();
+        CompositeChannelSingleton.compositeChannelSingleton.hydrate();
+        CompositeMessageSingleton.compositeMessageSingleton.hydrate();
+
+        this.writer.write(1);
+        this.writer.flush();
+    }
+
+    public void createServer() throws IOException {
+        String serverName = this.reader.readLine();
+        Server s = new Server(serverName);
+        CompositeServerSingleton.compositeServerSingleton.save(s);
+        this.writer.write(1);
+        this.writer.flush();
+    }
+
+    public void createChannel() throws IOException {
+        String channelName = this.reader.readLine();
+
+        if (selectedServer == null) {
+            System.out.println(selectedServer);
+            this.writer.write(0);
+            this.writer.flush();
+        }
+
+        Channel c = new Channel(channelName, selectedServer);
+        CompositeChannelSingleton.compositeChannelSingleton.save(c);
+
+        this.writer.write(1);
+        this.writer.flush();;
+    }
+
+    public void quitChannel() throws IOException {
         selectedChannel = null;
+        this.writer.write(1);
+        this.writer.flush();
     }
 
     public void writeMessage() throws IOException {
@@ -73,7 +130,7 @@ public class ClientServerRunner implements Runnable {
     }
 
     public void showChannels() throws IOException {
-        writer.write(String.valueOf(selectedServer));
+        writer.write(String.valueOf(CompositeServerSingleton.compositeServerSingleton.get(selectedServer)));
         writer.newLine();
         writer.write("");
         writer.flush();
@@ -122,14 +179,17 @@ public class ClientServerRunner implements Runnable {
     }
 
     public void joinChannel() throws IOException {
+        System.out.println("JOIN chan");
         if (me == null) {
-            this.writer.write(-1);
+            this.writer.write(0);
             this.writer.flush();
+            return;
         }
 
         if (selectedServer == null) {
-            this.writer.write(-1);
+            this.writer.write(0);
             this.writer.flush();
+            return;
         }
 
         selectedChannel = null;

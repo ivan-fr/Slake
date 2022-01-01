@@ -72,7 +72,7 @@ public class Server extends AbstractModel {
     public String toString() {
         return String.format("""
                         Server's name: %d - %s
-                            %s
+                        %s
                         """, (Integer) getKey(), name, getChannels().stream()
                         .map(Channel::toStringWithoutRelation)
                         .collect(Collectors.joining("", "", "")));
