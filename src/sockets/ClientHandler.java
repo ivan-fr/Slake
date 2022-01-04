@@ -277,14 +277,14 @@ public class ClientHandler {
         boolean first = true;
         do {
             if (!first) {
-                System.out.println("Pseudo already taken");
+                System.out.println("Username already taken");
             }
 
-            System.out.println("Give a pseudo");
+            System.out.println("Give a username");
             Scanner scanner = new Scanner(System.in);
-            String pseudo = scanner.nextLine();
+            String username = scanner.nextLine();
             writer.write(15);
-            writer.write(pseudo);
+            writer.write(username);
             writer.newLine();
             writer.flush();
             first = false;
