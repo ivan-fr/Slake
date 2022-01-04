@@ -198,6 +198,11 @@ public class ClientServerRunner implements Runnable {
             return;
         }
 
+        CompositeUserSingleton.compositeUserSingleton.hydrate();
+        CompositeServerSingleton.compositeServerSingleton.hydrate();
+        CompositeChannelSingleton.compositeChannelSingleton.hydrate();
+        CompositeMessageSingleton.compositeMessageSingleton.hydrate();
+
         writer.write(
                 String.format(
                         "%s", CompositeChannelSingleton.compositeChannelSingleton.get(selectedChannel).getMessages().stream()

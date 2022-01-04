@@ -2,6 +2,7 @@ package sockets;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -201,12 +202,19 @@ public class ClientHandler {
             threadMessage = new Thread(() -> {
                 while (clientSocket.isConnected()) {
                     try {
+
                         int choose = reader.read();
 
                         if (choose == 7) {
                             actionDispatcher(choose);
                         } else if (choose == 100) {
                             break;
+                        }
+                    } catch (SocketException e) {
+                        try {
+                            closeEverything();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
