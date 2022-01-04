@@ -10,6 +10,8 @@ public class ClientHandler {
     private final Socket clientSocket;
     private final BufferedReader reader;
     private final BufferedWriter writer;
+    private boolean connected = false;
+    private boolean selectedServer = false;
     private boolean menu_mode = true;
     private Thread threadMessage = null;
 
@@ -23,6 +25,11 @@ public class ClientHandler {
         while (clientSocket.isConnected()) {
             int choose;
 
+            /*
+                Quand on rejoint un channel
+                ça crée un thread qui permet d'écoute le serveur pour savoir si on reçois un message.
+                On quitte aussi le mode menu pour passer en écriture de message (action 8).
+             */
             if (!menu_mode) {
                 try {
                     actionDispatcher(8);
@@ -30,8 +37,10 @@ public class ClientHandler {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("""
+                try {
+                    System.out.println("""
                         Choose a action:
+                        0 - create account
                         1 - connection
                         2 - join a server
                         3 - join a channel (required to join a server before)
@@ -43,8 +52,12 @@ public class ClientHandler {
                         12 - delete Server
                         13 - delete Channel
                         """);
-                Scanner scanner = new Scanner(System.in);
-                choose = scanner.nextInt();
+                    Scanner scanner = new Scanner(System.in);
+                    choose = scanner.nextInt();
+                } catch (Exception e) {
+                    continue;
+                }
+
                 try {
                     actionDispatcher(choose);
                 } catch (IOException e) {
@@ -61,9 +74,7 @@ public class ClientHandler {
                 System.out.println("Wrong username");
             }
 
-            System.out.println("""
-                    Give a username
-                    """);
+            System.out.print("Give a username : ");
 
             Scanner scanner = new Scanner(System.in);
             String username = scanner.nextLine();
@@ -76,32 +87,55 @@ public class ClientHandler {
             first = false;
         } while (reader.read() == 0);
 
+        connected = true;
         System.out.println("You are connected");
     }
 
     public void joinServer() throws IOException {
         boolean first = true;
+        boolean defer = true;
         do {
             if (!first) {
                 System.out.println("Wrong server id");
             }
 
-            System.out.println("""
-                    Give a server id
-                    """);
+            System.out.println("Give a server id");
             Scanner scanner = new Scanner(System.in);
-            int serverId = scanner.nextInt();
-            writer.write(2);
-            writer.write(serverId);
-            writer.flush();
-            first = false;
-        } while (reader.read() == 0);
 
-        System.out.println("You are in server");
+            int serverId = scanner.nextInt();
+
+            if (serverId == -1) {
+                defer = false;
+                break;
+            } else {
+                writer.write(2);
+                writer.flush();
+
+                if (reader.read() == 0) {
+                    first = false;
+                    continue;
+                }
+
+                writer.write(serverId);
+                writer.flush();
+
+                if (reader.read() == 1) {
+                    break;
+                }
+            }
+
+            first = false;
+        } while (true);
+
+        if (defer) {
+            selectedServer = true;
+            System.out.println("You are in server");
+        }
     }
 
     public void joinChannel() throws IOException {
         menu_mode = false;
+        boolean defer = true;
 
         boolean first = true;
         do {
@@ -109,60 +143,105 @@ public class ClientHandler {
                 System.out.println("Wrong channel id");
             }
 
-            System.out.println("""
-                    Give a channel id
-                    """);
+            System.out.println("Give a channel id");
             Scanner scanner = new Scanner(System.in);
             int channel_id = scanner.nextInt();
-            writer.write(3);
-            writer.write(channel_id);
-            writer.flush();
-            first = false;
-        } while (reader.read() == 0);
 
-        System.out.println("You are in channel");
+            if (channel_id == -1) {
+                defer = false;
+                break;
+            } else {
+                writer.write(3);
+                writer.flush();
 
-        threadMessage = new Thread(() -> {
-            while (clientSocket.isConnected()) {
-                try {
-                    int choose = reader.read();
+                if (reader.read() == 0) {
+                    first = false;
+                    continue;
+                };
 
-                    if (choose == 7) {
-                        actionDispatcher(choose);
-                    } else {
-                        System.out.println("Error: the server shouldn't send this action.." + choose);
-                        break;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                writer.write(channel_id);
+                writer.flush();
+
+                if (reader.read() == 1) {
+                    break;
                 }
             }
-        });
-        threadMessage.start();
+        } while (true);
+
+        if (defer) {
+            System.out.flush();
+            System.out.println("You are in channel");
+            System.out.println("Messages history");
+
+            writer.write(16);
+            writer.flush();
+
+            while (true) {
+                String rep = reader.readLine();
+                try {
+                    Integer test = Integer.parseInt(rep);
+                    break;
+                } catch (Exception e) {
+                    System.out.println(rep);
+                }
+            }
+
+            writer.write(17);
+            writer.flush();
+
+            /*
+             Thread qui permet d'écouter la reception d'un message dans le channel que j'ai rejoint.
+             */
+            threadMessage = new Thread(() -> {
+                while (clientSocket.isConnected()) {
+                    try {
+                        int choose = reader.read();
+
+                        if (choose == 7) {
+                            actionDispatcher(choose);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            threadMessage.start();
+        }
     }
 
     public void showServers() throws IOException {
         writer.write(4);
         writer.flush();
-        String response;
-        while (!Objects.equals(response = reader.readLine(), "")) {
-            System.out.println(response);
+        while (true) {
+            String rep = reader.readLine();
+            try {
+                Integer test = Integer.parseInt(rep);
+                break;
+            } catch (Exception e) {
+                System.out.println(rep);
+            }
         }
-        System.out.println("OK.");
     }
 
     public void showChannels() throws IOException {
+        if (!connected && !selectedServer) return;
+
         writer.write(5);
         writer.flush();
-        String response;
-        while (!Objects.equals(response = reader.readLine(), "")) {
-            System.out.println(response);
+        while (true) {
+            String rep = reader.readLine();
+            try {
+                Integer test = Integer.parseInt(rep);
+                break;
+            } catch (Exception e) {
+                System.out.println(rep);
+            }
         }
-        System.out.println("OK.");
     }
 
     public void actionDispatcher(Integer action) throws IOException {
         switch (action) {
+            case 0 -> createAccount();
             case 1 -> connection();
             case 2 -> joinServer();
             case 3 -> joinChannel();
@@ -176,6 +255,26 @@ public class ClientHandler {
             case 12 -> deleteServer();
             case 13 -> deleteChannel();
         }
+    }
+
+    public void createAccount() throws IOException {
+        boolean first = true;
+        do {
+            if (!first) {
+                System.out.println("Pseudo already taken");
+            }
+
+            System.out.println("Give a pseudo");
+            Scanner scanner = new Scanner(System.in);
+            String pseudo = scanner.nextLine();
+            writer.write(15);
+            writer.write(pseudo);
+            writer.newLine();
+            writer.flush();
+            first = false;
+        } while (reader.read() == 0);
+
+        System.out.println("User created");
     }
 
     public void deleteChannel() throws IOException {
@@ -269,7 +368,7 @@ public class ClientHandler {
             return;
         }
 
-        System.out.println("Enter a message: ");
+        System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         String msgContent = scanner.nextLine();
 
@@ -289,7 +388,6 @@ public class ClientHandler {
     }
 
     public void receiveMessage() throws IOException {
-        System.out.println("read message...");
         String response;
         while (!Objects.equals(response = reader.readLine(), "")) {
             System.out.println(response);

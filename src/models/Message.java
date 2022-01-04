@@ -46,9 +46,7 @@ public class Message extends AbstractModel {
 
     public String toStringWithoutRelation() {
         return String.format("""
-                Message:
-                    content: %s
-                    date: %s
-                    """, content, date);
+                %s - %s: %s
+                """, date, getUser().toStringWithoutRelation(), content);
     }
 }

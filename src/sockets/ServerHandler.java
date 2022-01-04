@@ -5,9 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerHandler {
-
     private final ServerSocket serverSocket;
-    private final static int PORT = 1255 ;
 
     public ServerHandler(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -37,6 +35,4 @@ public class ServerHandler {
             e.printStackTrace();
         }
     }
-
-
 }

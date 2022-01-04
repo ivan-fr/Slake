@@ -36,6 +36,6 @@ public class User extends AbstractModel {
     }
 
     public String toStringWithoutRelation() {
-        return String.format("User's pseudo: %s", pseudo);
+        return String.format("%s", pseudo);
     }
 }
