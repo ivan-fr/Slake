@@ -46,7 +46,6 @@ public class ClientHandler {
                         3 - join a channel (required to join a server before)
                         4 - show servers
                         5 - show channels (required to join a server before)
-                        6 - close socket
                         10 - create Server
                         11 - create Channel (required to join a server before)
                         12 - delete Server
