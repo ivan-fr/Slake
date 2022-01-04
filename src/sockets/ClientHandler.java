@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class ClientHandler {
-
     private final Socket clientSocket;
     private final BufferedReader reader;
     private final BufferedWriter writer;
@@ -21,7 +20,7 @@ public class ClientHandler {
         this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
-    public void run() {
+    public void run() throws IOException {
         while (clientSocket.isConnected()) {
             int choose;
 
@@ -39,6 +38,7 @@ public class ClientHandler {
             } else {
                 try {
                     System.out.println("""
+                        ======================================================
                         Choose a action:
                         0 - create account
                         1 - connection
@@ -46,12 +46,15 @@ public class ClientHandler {
                         3 - join a channel (required to join a server before)
                         4 - show servers
                         5 - show channels (required to join a server before)
-                        6 - disconnect from server
+                        6 - close socket
                         10 - create Server
                         11 - create Channel (required to join a server before)
                         12 - delete Server
                         13 - delete Channel
+                        =======================================================
                         """);
+
+                    System.out.print("Action : ");
                     Scanner scanner = new Scanner(System.in);
                     choose = scanner.nextInt();
                 } catch (Exception e) {
@@ -62,6 +65,7 @@ public class ClientHandler {
                     actionDispatcher(choose);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    closeEverything();
                 }
             }
         }
@@ -169,7 +173,10 @@ public class ClientHandler {
         } while (true);
 
         if (defer) {
-            System.out.flush();
+            for (int i = 0; i < 30; i++) {
+                System.out.println("");
+            }
+
             System.out.println("You are in channel");
             System.out.println("Messages history");
 
@@ -199,6 +206,8 @@ public class ClientHandler {
 
                         if (choose == 7) {
                             actionDispatcher(choose);
+                        } else if (choose == 100) {
+                            break;
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -373,11 +382,11 @@ public class ClientHandler {
         String msgContent = scanner.nextLine();
 
         if (msgContent.contentEquals("quit")) {
-            writer.write(9);
-            writer.flush();
+            menu_mode = true;
             threadMessage.interrupt();
             threadMessage = null;
-            menu_mode = true;
+            writer.write(9);
+            writer.flush();
         } else {
             writer.write(7);
             writer.flush();

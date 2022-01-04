@@ -145,14 +145,16 @@ public class ClientServerRunner implements Runnable {
 
         Channel c = new Channel(channelName, selectedServer);
         CompositeChannelSingleton.compositeChannelSingleton.save(c);
+        CompositeServerSingleton.compositeServerSingleton.hydrate();
 
         this.writer.write(1);
-        this.writer.flush();;
+        this.writer.flush();
     }
 
     public void quitChannel() throws IOException {
+        broadcastMessage(new Message("<SERVER> Has left", new Date(), CompositeUserSingleton.compositeUserSingleton.get(me).getPseudo(), selectedChannel));
         selectedChannel = null;
-        this.writer.write(1);
+        this.writer.write(100);
         this.writer.flush();
     }
 
@@ -321,7 +323,7 @@ public class ClientServerRunner implements Runnable {
             try {
                 if (runningServer.selectedServer.equals(this.selectedServer)
                         && runningServer.selectedChannel.equals(this.selectedChannel) &&
-                        !Objects.equals(runningServer.me, me)
+                        !Objects.equals(runningServer.me, me) && message.getContent().trim().length() > 0
                 ) {
                     System.out.println("go broadcast");
 
