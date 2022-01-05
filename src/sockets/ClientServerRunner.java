@@ -299,7 +299,7 @@ public class ClientServerRunner implements Runnable {
             return;
         }
 
-        if (user.getPassword() != password) {
+        if (!Objects.equals(user.getPassword(), password)) {
             System.out.println("Passwords " + user.getPassword() + " and " + password + " are not the same");
             this.writer.write(0);
             this.writer.flush();

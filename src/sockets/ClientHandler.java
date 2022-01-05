@@ -81,8 +81,7 @@ public class ClientHandler {
             Scanner scanner = new Scanner(System.in);
             System.out.print("Give a username: ");
             String username = scanner.nextLine();
-            System.out.print("Give a password: ");
-            String password = String.valueOf(System.console().readPassword());
+            String password = new String(System.console().readPassword("Please enter your password: "));
 
             writer.write(1);
             writer.write(username);
@@ -286,10 +285,9 @@ public class ClientHandler {
             Scanner scanner = new Scanner(System.in);
             System.out.print("Give a username: ");
             String username = scanner.nextLine();
-            System.out.print("Give a password: ");
-            String password = String.valueOf(System.console().readPassword());
+            String password = new String(System.console().readPassword("Please enter your password: "));
 
-            writer.write(1);
+            writer.write(15);
             writer.write(username);
             writer.newLine();
             writer.write(password);
