@@ -18,11 +18,6 @@ public class User extends AbstractModel {
         return servers;
     }
     
-    public User(String username) {
-        this.username = username;
-        this.password = "";
-    }
-
     public User(String username, String password) {
         this.username = username;
         this.password = password;
