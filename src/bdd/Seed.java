@@ -16,19 +16,19 @@ public class Seed {
     private static final ServerRepository serverRepository = ServerRepository.serverRepository;
 
     public static void main(String[] args) {
-        User u = new User("user1");
+        User u = new User("user1", "aaaa");
         u = userRepository.save(u);
 
-        User u1 = new User("user2");
+        User u1 = new User("user2", "bbbb");
         u1 = userRepository.save(u1);
 
-        User u2 = new User("user3");
+        User u2 = new User("user3", "cccc");
         u2 = userRepository.save(u2);
 
-        User u3 = new User("user4");
+        User u3 = new User("user4", "dddd");
         u3 = userRepository.save(u3);
 
-        User u4 = new User("user5");
+        User u4 = new User("user5", "eeee");
         u4 = userRepository.save(u4);
 
         Server s = new Server("server1");

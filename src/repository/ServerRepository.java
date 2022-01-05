@@ -50,12 +50,12 @@ public class ServerRepository implements IRepository<Server, Integer> {
             s.getManyToManyReferences().put("users", new ArrayList<>());
 
             PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT * from User JOIN Server_has_User ShU on User.pseudo = ShU.User_pseudo JOIN Server S on S.idServer = ShU.Server_idServer where idServer = ?");
+                    "SELECT * from User JOIN Server_has_User ShU on User.username = ShU.User_username JOIN Server S on S.idServer = ShU.Server_idServer where idServer = ?");
             stmt.setInt(1, resServer.getInt("idServer"));
             ResultSet resUser = stmt.executeQuery();
 
             while (resUser.next()) {
-                s.getManyToManyReferences().get("users").add(resUser.getString("pseudo"));
+                s.getManyToManyReferences().get("users").add(resUser.getString("username"));
             }
 
             PreparedStatement stmtChannels = conn.prepareStatement("SELECT * from Channel join Server S on S.idServer = Channel.Server_idServer where idServer = ?");
@@ -127,12 +127,12 @@ public class ServerRepository implements IRepository<Server, Integer> {
                 s.getManyToManyReferences().put("users", new ArrayList<>());
 
                 PreparedStatement stmt = conn.prepareStatement(
-                        "SELECT * from User JOIN Server_has_User ShU on User.pseudo = ShU.User_pseudo JOIN Server S on S.idServer = ShU.Server_idServer where idServer = ?");
+                        "SELECT * from User JOIN Server_has_User ShU on User.username = ShU.User_username JOIN Server S on S.idServer = ShU.Server_idServer where idServer = ?");
                 stmt.setInt(1, res.getInt("idServer"));
                 ResultSet resUser = stmt.executeQuery();
 
                 while (resUser.next()) {
-                    s.getManyToManyReferences().get("users").add(resUser.getString("pseudo"));
+                    s.getManyToManyReferences().get("users").add(resUser.getString("username"));
                 }
 
                 PreparedStatement stmtChannels = conn.prepareStatement("SELECT * from Channel join Server S on S.idServer = Channel.Server_idServer where idServer = ?");

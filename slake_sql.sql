@@ -42,18 +42,18 @@ CREATE TABLE IF NOT EXISTS `Slake`.`Message` (
                                                 `content` VARCHAR(255) NOT NULL,
                                                 `Channel_idChannel` INT NOT NULL,
                                                 `date` VARCHAR(45) NULL,
-                                                `User_pseudo` VARCHAR(45) NOT NULL,
-                                                PRIMARY KEY (`idMessage`, `User_pseudo`),
+                                                `User_username` VARCHAR(45) NOT NULL,
+                                                PRIMARY KEY (`idMessage`, `User_username`),
                                                 INDEX `fk_Message_Channel1_idx` (`Channel_idChannel` ASC) VISIBLE,
-                                                INDEX `fk_Message_User1_idx` (`User_pseudo` ASC) VISIBLE,
+                                                INDEX `fk_Message_User1_idx` (`User_username` ASC) VISIBLE,
                                                 CONSTRAINT `fk_Message_Channel1`
                                                     FOREIGN KEY (`Channel_idChannel`)
                                                         REFERENCES `Slake`.`Channel` (`idChannel`)
                                                         ON DELETE CASCADE
                                                         ON UPDATE NO ACTION,
                                                 CONSTRAINT `fk_Message_User1`
-                                                    FOREIGN KEY (`User_pseudo`)
-                                                        REFERENCES `Slake`.`User` (`pseudo`)
+                                                    FOREIGN KEY (`User_username`)
+                                                        REFERENCES `Slake`.`User` (`username`)
                                                         ON DELETE CASCADE
                                                         ON UPDATE NO ACTION)
     ENGINE = InnoDB;
@@ -75,9 +75,9 @@ CREATE TABLE IF NOT EXISTS `Slake`.`Server` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Slake`.`Server_has_User` (
                                                         `Server_idServer` INT NOT NULL,
-                                                        `User_pseudo` VARCHAR(45) NOT NULL,
-                                                        PRIMARY KEY (`Server_idServer`, `User_pseudo`),
-                                                        INDEX `fk_Server_has_User_User1_idx` (`User_pseudo` ASC) VISIBLE,
+                                                        `User_username` VARCHAR(45) NOT NULL,
+                                                        PRIMARY KEY (`Server_idServer`, `User_username`),
+                                                        INDEX `fk_Server_has_User_User1_idx` (`User_username` ASC) VISIBLE,
                                                         INDEX `fk_Server_has_User_Server1_idx` (`Server_idServer` ASC) VISIBLE,
                                                         CONSTRAINT `fk_Server_has_User_Server1`
                                                             FOREIGN KEY (`Server_idServer`)
@@ -85,8 +85,8 @@ CREATE TABLE IF NOT EXISTS `Slake`.`Server_has_User` (
                                                                 ON DELETE CASCADE
                                                                 ON UPDATE NO ACTION,
                                                         CONSTRAINT `fk_Server_has_User_User1`
-                                                            FOREIGN KEY (`User_pseudo`)
-                                                                REFERENCES `Slake`.`User` (`pseudo`)
+                                                            FOREIGN KEY (`User_username`)
+                                                                REFERENCES `Slake`.`User` (`username`)
                                                                 ON DELETE CASCADE
                                                                 ON UPDATE NO ACTION)
     ENGINE = InnoDB;
@@ -96,9 +96,10 @@ CREATE TABLE IF NOT EXISTS `Slake`.`Server_has_User` (
 -- Table `Slake`.`User`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Slake`.`User` (
-                                             `pseudo` VARCHAR(45) NOT NULL,
-                                             UNIQUE INDEX `pseudo_UNIQUE` (`pseudo` ASC) VISIBLE,
-                                             PRIMARY KEY (`pseudo`))
+                                             `username` VARCHAR(45) NOT NULL,
+                                             `password` VARCHAR(45) NOT NULL,
+                                             UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
+                                             PRIMARY KEY (`username`))
     ENGINE = InnoDB;
 
 

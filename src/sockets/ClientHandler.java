@@ -75,16 +75,18 @@ public class ClientHandler {
         boolean first = true;
         do {
             if (!first) {
-                System.out.println("Wrong username");
+                System.out.println("Wrong credentials");
             }
 
-            System.out.print("Give a username : ");
-
             Scanner scanner = new Scanner(System.in);
+            System.out.print("Give a username: ");
             String username = scanner.nextLine();
+            String password = new String(System.console().readPassword("Please enter your password: "));
 
             writer.write(1);
             writer.write(username);
+            writer.newLine();
+            writer.write(password);
             writer.newLine();
             writer.flush();
 
@@ -277,16 +279,21 @@ public class ClientHandler {
         boolean first = true;
         do {
             if (!first) {
-                System.out.println("Pseudo already taken");
+                System.out.println("Username already taken");
             }
 
-            System.out.println("Give a pseudo");
             Scanner scanner = new Scanner(System.in);
-            String pseudo = scanner.nextLine();
+            System.out.print("Give a username: ");
+            String username = scanner.nextLine();
+            String password = new String(System.console().readPassword("Please enter your password: "));
+
             writer.write(15);
-            writer.write(pseudo);
+            writer.write(username);
+            writer.newLine();
+            writer.write(password);
             writer.newLine();
             writer.flush();
+
             first = false;
         } while (reader.read() == 0);
 

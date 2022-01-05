@@ -9,10 +9,10 @@ public class Message extends AbstractModel {
     private final String content;
     private final Date date;
 
-    public Message(String content, Date date, String userPseudo, Integer idChannel) {
+    public Message(String content, Date date, String userUsername, Integer idChannel) {
         this.content = content;
         this.date = date;
-        this.getManyToOneReferences().put("user", userPseudo);
+        this.getManyToOneReferences().put("user", userUsername);
         this.getManyToOneReferences().put("channel", idChannel);
     }
 
