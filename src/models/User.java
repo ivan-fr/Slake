@@ -19,6 +19,7 @@ public class User extends AbstractModel {
     }
     
     public User(String username, String password) {
+        this.setKey(username);
         this.username = username;
         this.password = password;
     }

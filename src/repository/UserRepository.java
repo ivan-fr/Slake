@@ -45,8 +45,6 @@ public class UserRepository implements IRepository<User, String> {
             }
 
             User u = new User(res.getString("username"), res.getString("password"));
-            u.setKey(res.getString("username"));
-
             u.getManyToManyReferences().put("servers", new ArrayList<>());
 
             PreparedStatement stmt = conn.prepareStatement(
@@ -114,8 +112,6 @@ public class UserRepository implements IRepository<User, String> {
 
             while (res.next()) {
                 User u = new User(res.getString("username"), res.getString("password"));
-                u.setKey(res.getString("username"));
-
                 u.getManyToManyReferences().put("servers", new ArrayList<>());
 
                 PreparedStatement stmt = conn.prepareStatement(
