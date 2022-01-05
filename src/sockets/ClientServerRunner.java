@@ -120,11 +120,13 @@ public class ClientServerRunner implements Runnable {
     }
 
     public void createUser() throws IOException {
-        String username = this.reader.readLine();
-        User u = new User(username);
+        String username = reader.readLine();
+        String password = reader.readLine();
+        User u = new User(username, password);
 
         if (CompositeUserSingleton.compositeUserSingleton.save(u) == null)
         {
+            System.err.println("User could not be saved");
             this.writer.write(0);
             this.writer.flush();
             return;
@@ -286,22 +288,31 @@ public class ClientServerRunner implements Runnable {
     public void connection() throws IOException {
         System.out.println("connection process");
         String username = reader.readLine();
+        String password = reader.readLine();
         System.out.println("=======" + username + "======");
-        User userExist = CompositeUserSingleton.compositeUserSingleton.get(username);
+        User user = CompositeUserSingleton.compositeUserSingleton.get(username);
 
-        if (userExist == null) {
+        if (user == null) {
+            System.out.println("user is null");
             this.writer.write(0);
             this.writer.flush();
             return;
         }
 
-        me = (String) userExist.getKey();
+        if (user.getPassword() != password) {
+            System.out.println("Passwords " + user.getPassword() + " and " + password + " are not the same");
+            this.writer.write(0);
+            this.writer.flush();
+            return;
+        }
+
+        me = (String) user.getKey();
         runningServers.add(this);
 
         this.writer.write(1);
         this.writer.flush();
 
-        System.out.println(new Date() + " : " + userExist.getUsername() + " joined.");
+        System.out.println(new Date() + " : " + user.getUsername() + " joined.");
     }
 
     private void broadcastMessage(Message message) throws IOException {
